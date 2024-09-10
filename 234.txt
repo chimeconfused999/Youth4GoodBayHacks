@@ -1,0 +1,11 @@
+Title: 234
+Data: Array
+(
+    [title] => 234
+    [data] => 2024-09-09
+    [place] => 
+    [duration] => 
+    [description] => 
+    [members] => 0
+)
+
