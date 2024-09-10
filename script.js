@@ -5,6 +5,7 @@ var monthElement;
 var currentMonths;
 var year ;
 let currentMonthIndex;
+let currentDate
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
@@ -184,7 +185,7 @@ function calendar(){
     const currentMonth = new Date()
     currentMonthIndex = currentMonth.getMonth();
     const currentYear = new Date().getFullYear();
-    const currentDay = currentMonth.getDate();
+    currentDay = currentMonth.getDate();
 
     createCalendar();
 }
