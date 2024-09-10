@@ -184,6 +184,7 @@ function calendar(){
     const currentMonth = new Date()
     currentMonthIndex = currentMonth.getMonth();
     const currentYear = new Date().getFullYear();
+    const currentDay = currentMonth.getDate();
 
     createCalendar();
 }

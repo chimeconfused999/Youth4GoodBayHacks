@@ -27,6 +27,9 @@ if (file_put_contents($file, $jsonData)) {
 } else {
     echo json_encode(["status" => "error"]);
 }
-$myfile = fopen($data".txt", "w")
+print_r($data.title);
+if (file_exists('testfile.txt')){
+    $myfile = fopen("testfile.txt", "w")
+}
 ?>
 
