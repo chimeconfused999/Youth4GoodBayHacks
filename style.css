@@ -402,7 +402,15 @@ table {
     border: 1px solid black;
     border-radius: 5px;
 }
-
+#joinbutton{
+  padding: 1px;
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 50%;
+  border: 1px solid black;
+  border-radius: 5px;
+  
+}
 
 /*#notificationBtn{
   border:none;

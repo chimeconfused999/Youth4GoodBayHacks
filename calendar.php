@@ -1,37 +1,3 @@
-Skip to content
-Commands
-Search
-Config files
-Recent
-Cloud Services
-Workspace Features
-Collaboration
-Other
-Workspace Extensions
-None installed.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <?php
 // server.php
@@ -65,15 +31,16 @@ if (file_put_contents($file, $jsonData)) {
 
 // Check if 'title' is set in the data and create a text file with that name
 $title = isset($data['title']) ? $data['title'] : null;
+$name = isset($data['name']) ? $data['name'] : null;
 
 if ($title) {
     $myfile = fopen($title . ".txt", "w+");
     if ($myfile) {
-        // Write data to the file (you can adjust what you write here)
-        fwrite($myfile, "Title: " . $title . "\n");
-        fwrite($myfile, "Data: " . print_r($data, true) . "\n");
+        // // Write data to the file (you can adjust what you write here)
+        fwrite($myfile, $name . "\n");  
         
-        // Close the file
+        
+        // // Close the file
         fclose($myfile);
     } else {
         echo json_encode(["status" => "error", "message" => "Could not create file."]);

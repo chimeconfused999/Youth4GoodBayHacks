@@ -1,11 +1,13 @@
-localStorage.setItem("name" , "maxzhang")
+localStorage.setItem("name" , "jon")
 let events = []
 var calendarGrid;
 var monthElement;
 var currentMonths;
 var year ;
 let currentMonthIndex;
+let currentMonth2;
 let currentDay;
+let currentYear;
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
@@ -182,10 +184,12 @@ function calendar(){
 
     currentMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
    year = 2024;
-    const currentMonth = new Date()
+    currentMonth = new Date()
     currentMonthIndex = currentMonth.getMonth();
-    const currentYear = new Date().getFullYear();
+  
     currentDay = currentMonth.getDate();
+  currentMonth2 = currentMonth.getMonth()+1;
+  currentYear = currentMonth.getFullYear();
 
     createCalendar();
 }
@@ -204,9 +208,10 @@ function createCalendar() {
       dayDiv.setAttribute('data-date', eventDate);
       calendarGrid.appendChild(dayDiv);
 
-
-      if(day >= currentDay){
-        avaliablebutton(dayDiv, currentMonthIndex, day,year);
+      if ((year > currentYear) || 
+          (year === currentYear && currentMonthIndex+1 > currentMonth2) || 
+          (year === currentYear && currentMonthIndex+1 === currentMonth2 && day >= currentDay)) {
+          avaliablebutton(dayDiv, currentMonthIndex+1, day, year);
       }
 
   }
@@ -267,7 +272,7 @@ function send(){
     place: document.getElementById("eventLocation").value,
     duration: document.getElementById("eventDuration").value,
     description: document.getElementById("eventDescription").value,
-    members: 0
+    name: localStorage.getItem("name")
   }
       $.ajax({
         type: "POST",
@@ -314,6 +319,54 @@ eventElement.textContent = eventForDay.title;
 dayDiv.appendChild(eventElement);
 
 }
+function joinEvent() {
+  textlines = []
+  const title = document.getElementById("eventTitleDisplay").textContent.trim();
+  const safeTitle = encodeURIComponent(title);  // Sanitizing the title
+
+  fetch(safeTitle + ".txt")
+  .then(response => {
+    // Check if the response is successful
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.text(); // Parse the JSON data
+  })
+  .then(data => {       
+    textLines = data.split('\n');
+    alert(textLines)
+    if(textLines.includes(localStorage.getItem("name"))){
+      document.getElementById("joinbutton").innerHTML = "Joined";
+    } else {
+      document.getElementById("joinbutton").innerHTML = "Joined";
+      $.ajax({
+          type: "POST",
+          url: "attendance.php",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function(response) {
+              console.log("Data sent successfully:", response);
+          },
+          error: function(error) {
+              console.error("Error sending data:", error);
+          }
+      });
+      
+    }
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+    var data = {
+      title: document.getElementById("eventTitleDisplay").innerHTML,
+      name: localStorage.getItem("name")
+    };
+
+    console.log("Sending data:", data); // Log the data to check its values
+
+    
+}
+
 
 // // Update member count in real-time
 // function updateMemberCount(dayDiv, eventForDay) {
@@ -387,15 +440,25 @@ function addEvent2( title, date , place, duration, description) {
 
   const eventTitle = title;
   const eventDate = date;
-  var month = eventDate.split('-')[1];
-  var day = eventDate.split('-')[2];
+  const year = parseInt(eventDate.split('-')[0],10);
+  var month = parseInt(eventDate.split('-')[1],10);
+  var day = parseInt(eventDate.split('-')[2],10);
   let red = false;
-  if (month<9){
-    red = true;
+   // Initialize the `red` variable
+
+  // Check if the year is before the current year
+  if (year < currentYear) {
+      red = true;
   }
-  else if (month == 9 && day < currentDay){
-    red = true;
+  // If the year is the same, check the month
+  else if (year === currentYear && month < currentMonth2) {
+      red = true;
   }
+  // If the year and month are the same, check the day
+  else if (year === currentYear && month === currentMonth2 && day < currentDay) {
+      red = true;
+  }
+
   const eventplace = place;
   const eventDuration = duration;
   const eventDescription = description;
@@ -437,15 +500,25 @@ function addEvent() {
     const eventplace = document.getElementById('eventLocation').value;
     const eventDuration = document.getElementById('eventDuration').value;
     const eventDescription = document.getElementById('eventDescription').value;
-    var month = eventDate.split('-')[1];
-    var day = eventDate.split('-')[2];
+    var year = parseInt(eventDate.split('-')[0],10);
+    var month = parseInt(eventDate.split('-')[1],10);
+    var day = parseInt(eventDate.split('-')[2],10);
     let red = false;
-    if (month<9){
+   // Initialize the `red` variable
+
+  // Check if the year is before the current year
+  if (year < currentYear) {
       red = true;
-    }
-    else if (month == 9 && day < currentDay){
+  }
+  // If the year is the same, check the month
+  else if (year === currentYear && month < currentMonth2) {
       red = true;
-    }
+  }
+  // If the year and month are the same, check the day
+  else if (year === currentYear && month === currentMonth2 && day < currentDay) {
+      red = true;
+  }
+
 
     const dayDiv = document.querySelector(`.calendar-day[data-date='${eventDate}']`);
 
@@ -509,10 +582,24 @@ function showEventDetails(title, date, place, duration, description) {
   if (document.getElementById('changechat')){
     document.getElementById('changechat').innerHTML = title + " Chat";
   }
-
-
-
+  let eventDate = date;
   const panel = document.getElementById('eventDetailsPanel');
+  const eventYear = eventDate.split('-')[0];
+  const eventMonth = parseInt(eventDate.split('-')[1],10);
+  const eventDay = parseInt(eventDate.split('-')[2],10);
+  let joinButton = document.getElementById('joinbutton');
+  if (eventYear == currentYear && eventMonth == currentMonth2) {
+
+    if (joinButton) {
+        joinButton.style.display = 'block';
+    }
+  } else {
+
+    if (joinButton) {
+        joinButton.style.display = 'none';
+    }
+  }
+
   panel.classList.add('show-panel');
 }
 

@@ -6,6 +6,7 @@
     <title>Youth4Good Overview</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div id="siteheader">
@@ -18,7 +19,7 @@
 
     <div id = "TITLE">
         <h1>Youth 4 Good</h1>
-        <!--<button id="notificationBtn" onclick="askNotificationPermission()"><img src = "bell.png" alt = "notification" width = "35px" height = "35px"></button>!-->
+        <button id="notificationBtn" onclick="Notifaction()"><img src = "bell.png" alt = "notification" width = "35px" height = "35px"></button>
     </div>
     <div class="line-1"></div>
     <div id = "titledescription">
@@ -45,6 +46,7 @@
         <h2 id="eventLocationDisplay">Event Duration</h2>
         <h2 id="eventDescriptionDisplay">Event Description</h2>
         <button id = "changechat" onclick = "changetochat()">Change Chat</button>
+        <button id = "joinbutton" onclick = "joinEvent()">Join</button>
 
         <button id = "closeevent" onclick="closeEventDetails()">Close</button>
         <button id = "editevent" class = "adminonly" onclick="editevent()">Edit</button>
