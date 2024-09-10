@@ -5,7 +5,7 @@ var monthElement;
 var currentMonths;
 var year ;
 let currentMonthIndex;
-let currentDate
+let currentDay;
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function startAfterPreload(){
 
   checkName();
-  addExistingEvents();
   checkOwnership();
   calendar();
+  addExistingEvents();
 
   if(localStorage.getItem("curchat") == null){
     localStorage.setItem("curchat","general")
@@ -204,12 +204,16 @@ function createCalendar() {
       dayDiv.setAttribute('data-date', eventDate);
       calendarGrid.appendChild(dayDiv);
 
-      avaliablebutton(dayDiv, currentMonthIndex, day,year);
+
+      if(day >= currentDay){
+        avaliablebutton(dayDiv, currentMonthIndex, day,year);
+      }
 
   }
 }
 
 function avaliablebutton(dayDiv, currentMonthIndex, day,year){
+  
   if (localStorage.getItem(`day-btn-${day}-${currentMonthIndex}-${year}`) == "Unavaliable"){
     const unavaliableButton = document.createElement('button');
     unavaliableButton.innerHTML = 'Unavaliable';
@@ -389,7 +393,7 @@ function addEvent2( title, date , place, duration, description) {
   if (month<9){
     red = true;
   }
-  else if (month == 9 && day < 7){
+  else if (month == 9 && day < currentDay){
     red = true;
   }
   const eventplace = place;
@@ -439,7 +443,7 @@ function addEvent() {
     if (month<9){
       red = true;
     }
-    else if (month == 9 && day < 7){
+    else if (month == 9 && day < currentDay){
       red = true;
     }
 
