@@ -6,6 +6,10 @@ var currentMonths;
 var year ;
 let currentMonthIndex;
 let currentDay;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 80942d40507e4f4624c2810202a705f4f2afa6b4
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);

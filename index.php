@@ -6,10 +6,17 @@
     <title>Youth4Good Overview</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+<<<<<<< HEAD
     <script type="module" src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
     <script type="module" src="bower_components/firebaseui/dist/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="bower_components/firebaseui/dist/firebaseui.css" />
+=======
+    <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script src="googlesignin.js"></script>
+>>>>>>> 80942d40507e4f4624c2810202a705f4f2afa6b4
 </head>
 <body>
     <div id="siteheader">
@@ -17,6 +24,9 @@
         <div id = "siteheader-content">
             <span id = "overview" onclick="transitionToPage('index.html')" class = "currentpage">Overview</span>
             <span id = "overview" onclick="transitionToPage('calendar.html')">Calendar</span>
+            <input type="button" onclick="callGoogleSignIn()" value="Google Sign In"/>
+        <script>
+        </script>
         </div>
     </div>
 
@@ -49,7 +59,6 @@
         <h2 id="eventLocationDisplay">Event Duration</h2>
         <h2 id="eventDescriptionDisplay">Event Description</h2>
         <button id = "changechat" onclick = "changetochat()">Change Chat</button>
-
         <button id = "closeevent" onclick="closeEventDetails()">Close</button>
         <button id = "editevent" class = "adminonly" onclick="editevent()">Edit</button>
         <div id="myDropdown" class="dropdown-content">
