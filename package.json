@@ -2,6 +2,7 @@
   "dependencies": {
     "firebase": "^10.13.1",
     "firebaseui": "^6.1.0",
-    "php": "^1.1.0"
+    "php": "^1.1.0",
+    "type": "module"
   }
 }
