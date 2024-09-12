@@ -6,17 +6,10 @@
     <title>Youth4Good Overview</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-<<<<<<< HEAD
-    <script type="module" src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
-    <script type="module" src="bower_components/firebaseui/dist/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="bower_components/firebaseui/dist/firebaseui.css" />
-=======
     <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
     <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
     <script type="module" src="firebase.js"></script>
     <script src="googlesignin.js"></script>
->>>>>>> 80942d40507e4f4624c2810202a705f4f2afa6b4
 </head>
 <body>
     <div id="siteheader">
