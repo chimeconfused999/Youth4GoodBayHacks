@@ -1,4 +1,4 @@
-localStorage.setItem("name" , "maxzhang")
+localStorage.setItem("name" , name)
 let events = []
 var calendarGrid;
 var monthElement;

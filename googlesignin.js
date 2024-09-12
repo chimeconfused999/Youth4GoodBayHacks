@@ -1,33 +1,8 @@
-const { initializeApp, getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, getFirestore, collection, getDocs } = require('./firebase.js')
-// Firebase configuration (replace with your actual Firebase config)
-const firebaseConfig = {
-    apiKey: "AIzaSyCgtwixZIOJBswVrCSoLNoMkvu_iPrO-to",
-    authDomain: "bay-hacks-hackathon.firebaseapp.com",
-    projectId: "bay-hacks-hackathon",
-    storageBucket: "bay-hacks-hackathon.appspot.com",
-    messagingSenderId: "710452009234",
-    appId: "1:710452009234:web:bdcaeef736e85cdaae7bcb",
-    measurementId: "G-RZS0TRQSV0"
-};
-
-// Initialize Firebase App (try-catch in case of multiple initializations)
-let app;
-try {
-    app = initializeApp(firebaseConfig);
-    console.log("Firebase initialized");
-} catch (e) {
-    console.error("Firebase already initialized:", e);
-}
-
-// Initialize Firestore and Auth
-const db = getFirestore(app);
-const auth = getAuth(app);
-
 // Function to get cities from Firestore
 async function getCities() {
     try {
-        const citiesCol = collection(db, 'cities');
-        const citySnapshot = await getDocs(citiesCol);
+        const citiesCol = window.firebaseFirestore.collection('cities');
+        const citySnapshot = await citiesCol.get();
         const cityList = citySnapshot.docs.map(doc => doc.data());
         console.log(cityList); // Log to check if data is fetched
         return cityList;
@@ -37,24 +12,46 @@ async function getCities() {
 }
 
 // Function to sign in with Google using Firebase Authentication
+// Function to sign in with Google using Firebase Authentication
+// Function to sign in with Google using Firebase Authentication
+// Function to sign in with Google using Firebase Authentication
+// Function to sign in with Google using Firebase Authentication
 async function callGoogleSignIn(){
-    const provider = new GoogleAuthProvider();
+    const provider = new window.GoogleAuthProvider();
+
     try {
-        const result = await signInWithPopup(auth, provider);
-        // Get user info and token
-        const token = result.credential.accessToken;
+        const result = await window.signInWithPopup(window.firebaseAuth, provider);
+        const signInButton = document.getElementById("googleSignIn")
+        
+        // Always available: user info
         const user = result.user;
-        console.log("User signed in: ", user);  // Log user info to verify
+        // If user has a profile picture, update the button
+        // If user has a profile picture, update the button
+        if (user.photoURL) {
+            signInButton.style.backgroundImage = `url(${user.photoURL})`;
+            signInButton.style.backgroundSize = 'cover';
+            signInButton.style.borderRadius = '50%'; // Make it circular
+            signInButton.style.width = '50px'; // Set button width (adjust as needed)
+            signInButton.style.height = '50px'; // Set button height (adjust as needed)
+            signInButton.textContent = ''; // Remove the button text
+        }
+        
+        console.log("User signed in:");
+        console.log("Name: ", user.displayName);
+        console.log("Email: ", user.email);
+        console.log("Photo URL: ", user.photoURL);
+        console.log("User ID: ", user.uid);
+        //alert("Hello, ", user.email)
+        var username = user.displayName;
+        console.log(user.displayName);
+        window.name = username;
+
     } catch (error) {
         console.error("Error during sign-in: ", error.code, error.message);
     }
+
 }
 
-// Auth State Change Listener (optional to check if user is signed in)
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("User is signed in:", user);
-    } else {
-        console.log("No user is signed in");
-    }
-});
+
+
+

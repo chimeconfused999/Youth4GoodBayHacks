@@ -17,7 +17,7 @@
         <div id = "siteheader-content">
             <span id = "overview" onclick="transitionToPage('index.html')" class = "currentpage">Overview</span>
             <span id = "overview" onclick="transitionToPage('calendar.html')">Calendar</span>
-            <input type="button" onclick="callGoogleSignIn()" value="Google Sign In"/>
+            <button onclick="callGoogleSignIn()" value="Google Sign In" id="googleSignIn">Google</button>
         <script>
         </script>
         </div>
