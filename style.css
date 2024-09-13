@@ -7,27 +7,65 @@
 
 body {
   opacity: 0;
+  background-color:#c4e7f2;
   padding-bottom:20px;
   overflow-x: hidden;
   transition: opacity .3s;
 }
 
+#placeholder{
+   background: linear-gradient(to top, #09203f 0%, #537895 100%);
+  position: absolute; /* Make the header fixed at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
 #siteheader {
-  background-image: url("Croppedbackground1.png");
-  background-size: cover;
+  background: none;
+  color:white;
   display: flex;
+  opacity: 1;
   align-items: center;
+  position: fixed; /* Make the header fixed at the top */
+  top: 0;
+  left: 0;
   justify-content: space-between;
+  z-index: 10;
   width: 100%;
   height: 75px;
-  border-bottom: 1px solid rgba(0,0,0,0.5);
-  box-shadow: 0px 3px 21px;
+  
   padding-right: 50px;
+  transition-duration:0.3s;
 }
+body > *:not(#siteheader):not(#placeholder) {
+  margin-top: 150px; /* Same as the header height */
+}
+
+
+#siteheader.scrolled {
+  height: 75px;
+  color:black;
+  background: white; /* Remain white when scrolled */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle shadow change */
+}
+
+#siteheader #Logoname, 
+#siteheader #siteheader-content span {
+  color: white; /* Initial text color black */
+}
+
+#siteheader.scrolled #Logoname, 
+#siteheader.scrolled #siteheader-content span {
+  color: black; /* Keep text black when scrolled */
+}
+
 #Logoname {
   filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
   margin-right: 15px;
-  margin-left: 20px;
+  margin-left: 30px;
   min-width: 30px;
   font-size:1.5rem;
   font-weight: bold;
@@ -37,6 +75,8 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
+  z-index: 10; /* Added z-index */
+  position: relative;
 }
 
 #siteheader-content {
@@ -58,21 +98,30 @@ body {
 }
 
 .currentpage {
-  text-decoration: underline gold;
+  text-decoration: underline #71dbfe;
 }
 
 #TITLE {
-  font-size: 2.5rem;
+  
+  flex-direction: column;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  font-family: 'Arial Black', sans-serif;
+  font-size: 2rem;
   width: 100%;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  z-index: 1; /* Ensure TITLE is below siteheader */
+  position: relative;
+  padding: 70px;
+  background-color:#ffffff;
   display: flex;
-  font-weight: 100;
-  color:#1c3a97;
+  font-weight: 900;
+  color:#000000;
+  letter-spacing: -2px;
   justify-content: center;
   align-items: center;
   text-align: center;
+
 }
+
 
 #TITLE h1 {
   font-weight: 500;
@@ -115,7 +164,9 @@ body {
 
 .calendar-container {
   max-width: 1000px;
+  
   margin: 50px auto;
+  margin-top: 20px;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -182,6 +233,22 @@ body {
   text-align: center;
   font-size: 12px;
 }
+.eventDetPanBTN{
+  border: none;
+  outline: none;
+  background: none;
+  background-color: #52abff;
+  color: #fff;
+  padding: 17.5px;
+  margin: 0 auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 4px;
+  margin-top: 10px;
+  display: block;
+  text-align: center;
+  font-size: 12px;
+}
 
 .event-details-panel {
   overflow-y: scroll;
@@ -209,6 +276,33 @@ body {
   font-size: 1.25rem;
 }
 
+.event-details-panel2 {
+  overflow-y: auto;
+  position: fixed;
+  top:50%;
+  transform: translateY(-50%);
+  left: -100%; /* Initially hide the sidebar */
+  width: 25vw;
+  height: 100vh;
+  background-color: #ededed;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  text-align: center;
+  transition: left 0.4s ease; /* Transition for 'left' property */
+  z-index: 1001;
+}
+.event-details-panel2 h1 {
+  font-weight: bold;
+  font-size: 1.5rem; 
+}
+
+.event-details-panel2 h2 {
+  font-weight: normal;
+  font-size: 1.25rem;
+}
+.show-panel2 {
+ left: 0px;
+}
 
 .show-panel {
   bottom: 20px;
@@ -227,6 +321,32 @@ table {
   padding: 10px;
   cursor: pointer;
   transition-duration: 0.5s;
+}
+.sidebarform{
+  background-color:#bee5f4;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: #454545;
+  border-radius: 5px;
+  padding:5px;
+  border:none;
+  margin-top:10px;
+}
+.sidebarform[input=text]{
+  color:#737373;
+  font-family: 'Roboto', sans-serif;
+}
+.sidebarbtn{
+  background-color:#0084ff;
+  border-radius:5px;
+  outline:3px solid lightgray;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  transition-duration: 0.5s;
+}
+.sidebarbtn:hover {
+  transform: translateY(-3px);
 }
 
 .dropbtn:hover {

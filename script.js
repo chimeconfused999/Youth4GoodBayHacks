@@ -1,4 +1,4 @@
-localStorage.setItem("name" , "jon")
+//localStorage.setItem("name" , "kaizhang")
 let events = []
 var calendarGrid;
 var monthElement;
@@ -8,6 +8,9 @@ let currentMonthIndex;
 let currentMonth2;
 let currentDay;
 let currentYear;
+let eventdet = true;
+let editbar = true;
+let infobar = true;
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
@@ -90,7 +93,8 @@ function preloadImages(callback) {
   });
 }
 
-function createEvent1() {  document.getElementById("myDropdown").classList.toggle("show");
+function createEvent1() {  
+  document.getElementById("myDropdown").classList.toggle("show");
 }
 
 function addExistingEvents(){
@@ -162,15 +166,20 @@ function checkOwnership(){
     return response.json(); // Parse the JSON data
   })
   .then(data => {
-    if(data.includes(localStorage.getItem("name"))){
-      //alert("YOU ARE AN ADMIN");
-      var elements = document.getElementsByClassName('adminonly');
-      for (var i in elements) {
-        if (elements.hasOwnProperty(i)) {
-          elements[i].className = 'dropbtn';
-        }
-      }
+    if (data.includes(localStorage.getItem("name"))) {
+        // Use querySelectorAll to select all elements with the 'adminonly' class
+        var elements = document.querySelectorAll('.adminonly');
+
+        // Loop through the NodeList using forEach
+        elements.forEach(function(element) {
+            // Example alert to show the element's id
+            //alert(element.id);
+            // Replace 'adminonly' with 'dropbtn' while keeping other classes intact
+            element.classList.replace('adminonly', 'dropbtn');
+        });
     }
+
+
   })
   .catch(error => {
     console.error('There was a problem with the fetch operation:', error);
@@ -188,8 +197,39 @@ function calendar(){
     currentMonthIndex = currentMonth.getMonth();
   
     currentDay = currentMonth.getDate();
-  currentMonth2 = currentMonth.getMonth()+1;
-  currentYear = currentMonth.getFullYear();
+    currentMonth2 = currentMonth.getMonth()+1;
+    currentYear = currentMonth.getFullYear();
+      fetch('data.json')
+       .then(response => response.json())
+       .then(data => {
+         for (i=0; i<data.length; i++){
+           l=data[i].data.split("-");
+           if(l[0]<currentYear || l[0] == currentYear && l[1]<currentMonth2 || l[0] == currentYear && l[1] == currentMonth2 && l[2]<currentDay ){
+             //funny thing
+             var filename = encodeURIComponent(data[i].title) + ".txt";
+
+             if (filename) {
+                 $.ajax({
+                     url: 'delete_file.php',
+                     type: 'POST',
+                     data: { filename: filename },
+                     dataType: 'json',
+                     success: function(response) {
+                         $('#responseMessage').text(response.message);
+                     },
+                     error: function() {
+                         $('#responseMessage').text('An error occurred while deleting the file.');
+                     }
+                 });
+             }
+           } 
+         }
+       
+       })
+       .catch(error => {
+         console.error('Error fetching or parsing JSON:', error);
+    });
+  
 
     createCalendar();
 }
@@ -211,7 +251,7 @@ function createCalendar() {
       if ((year > currentYear) || 
           (year === currentYear && currentMonthIndex+1 > currentMonth2) || 
           (year === currentYear && currentMonthIndex+1 === currentMonth2 && day >= currentDay)) {
-          avaliablebutton(dayDiv, currentMonthIndex+1, day, year);
+          //avaliablebutton(dayDiv, currentMonthIndex+1, day, year);
       }
 
   }
@@ -320,50 +360,52 @@ dayDiv.appendChild(eventElement);
 
 }
 function joinEvent() {
-  textlines = []
   const title = document.getElementById("eventTitleDisplay").textContent.trim();
   const safeTitle = encodeURIComponent(title);  // Sanitizing the title
-
-  fetch(safeTitle + ".txt")
-  .then(response => {
-    // Check if the response is successful
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.text(); // Parse the JSON data
-  })
-  .then(data => {       
-    textLines = data.split('\n');
-    alert(textLines)
-    if(textLines.includes(localStorage.getItem("name"))){
+  var data = {
+    title: document.getElementById("eventTitleDisplay").innerHTML,
+    name: localStorage.getItem("name")
+  };
+  if(document.getElementById("joinbutton").innerHTML.trim() == "Join"){
+    console.log("Sending data:", data); // Log the data to check its values
+    if(document.getElementById('eventTitleDisplay').innerHTML.trim() == title){
       document.getElementById("joinbutton").innerHTML = "Joined";
-    } else {
-      document.getElementById("joinbutton").innerHTML = "Joined";
-      $.ajax({
-          type: "POST",
-          url: "attendance.php",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          success: function(response) {
-              console.log("Data sent successfully:", response);
-          },
-          error: function(error) {
-              console.error("Error sending data:", error);
-          }
-      });
+      document.getElementById("joinbutton").style.backgroundColor = "lightblue";
+      
+        document.getElementById("mcount").textContent = parseInt(document.getElementById("mcount").textContent) + 1;
       
     }
-  })
-  .catch(error => {
-    console.error('There was a problem with the fetch operation:', error);
-  });
-    var data = {
-      title: document.getElementById("eventTitleDisplay").innerHTML,
-      name: localStorage.getItem("name")
-    };
-
-    console.log("Sending data:", data); // Log the data to check its values
-
+    $.ajax({
+        type: "POST",
+        url: "attendance.php",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            console.log("Data sent successfully:", response);
+        },
+        error: function(error) {
+            console.error("Error sending data:", error);
+        }
+    });
+  } else {
+    if(confirm("Are you sure you want to leave this event?")){
+      document.getElementById("joinbutton").innerHTML = "Join";
+      document.getElementById("mcount").textContent = parseInt(document.getElementById("mcount").textContent) - 1;
+      document.getElementById("joinbutton").style.backgroundColor = "#52abff";
+    $.ajax({
+        type: "POST",
+        url: "leave.php",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            console.log("Data sent successfully:", response);
+        },
+        error: function(error) {
+            console.error("Error sending data:", error);
+        }
+    });
+    }
+  }
     
 }
 
@@ -434,6 +476,19 @@ document.body.addEventListener('click', function (event) {
       }
     }
   }
+  if (!event.target.closest('.event-details-panel') && document.getElementById("eventDetailsPanel").classList.contains("show-panel") && eventdet == false && infobar == true && editbar == true && !event.target.closest('.event')){
+    eventdet = true;
+    closeEventDetails();
+  }
+  if (!event.target.closest('.event-details-panel2') && infobar == false){
+    infobar = true;
+    closeEventDetails2();
+  }
+  if (!event.target.closest('.event-details-panel2') && editbar == false){
+    editbar = true;
+    closeeditdet();
+  }
+  
 });
 
 function addEvent2( title, date , place, duration, description) {
@@ -460,7 +515,7 @@ function addEvent2( title, date , place, duration, description) {
   }
 
   const eventplace = place;
-  const eventDuration = duration;
+  const eventDuration = duration +" hour(s)";
   const eventDescription = description;
   const payPiv = document.querySelector(`.calendar-day[data-date='${eventDate}']`);
 
@@ -498,7 +553,7 @@ function addEvent() {
     const eventDate = document.getElementById('eventDate').value;
 
     const eventplace = document.getElementById('eventLocation').value;
-    const eventDuration = document.getElementById('eventDuration').value;
+    const eventDuration = document.getElementById('eventDuration').value + " hour(s)";
     const eventDescription = document.getElementById('eventDescription').value;
     var year = parseInt(eventDate.split('-')[0],10);
     var month = parseInt(eventDate.split('-')[1],10);
@@ -572,11 +627,13 @@ function addEvent() {
 // }
 
 function showEventDetails(title, date, place, duration, description) {
+  textLines = []
   document.getElementById('eventTitleDisplay').textContent = title;
   document.getElementById('eventDateDisplay').textContent = date;
   document.getElementById('eventPlaceDisplay').textContent = place;
   document.getElementById('eventLocationDisplay').textContent = duration;
   document.getElementById('eventDescriptionDisplay').textContent = description;
+  
 
     
   if (document.getElementById('changechat')){
@@ -588,10 +645,50 @@ function showEventDetails(title, date, place, duration, description) {
   const eventMonth = parseInt(eventDate.split('-')[1],10);
   const eventDay = parseInt(eventDate.split('-')[2],10);
   let joinButton = document.getElementById('joinbutton');
+  //add eventDay == currentDay later;
   if (eventYear == currentYear && eventMonth == currentMonth2) {
 
     if (joinButton) {
+      textLines = []
         joinButton.style.display = 'block';
+      const title = document.getElementById("eventTitleDisplay").textContent.trim();
+      const safeTitle = encodeURIComponent(title);  // Sanitizing the title
+      
+      fetch(safeTitle + ".txt")
+        
+      .then(response => {
+        // Check if the response is successful
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text(); // Parse the JSON data
+      })
+      .then(data => {       
+        const textLines = data.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        
+        const userName = localStorage.getItem("name");
+        //alert(textLines.includes(userName))
+
+        // Get the user's name from local storage
+        if(document.getElementById('eventTitleDisplay').innerHTML == title){
+          document.getElementById("mcount").textContent = textLines.length;
+        }
+
+        // Check if the user's name is in the list of names for this event
+        
+        if (textLines.includes(userName) && document.getElementById("eventTitleDisplay").innerHTML.trim() == title ) {
+          
+          // If the name is already in the list, show the user they have already joined
+          document.getElementById("joinbutton").innerHTML = "Joined";
+          document.getElementById("joinbutton").style.backgroundColor = "lightblue"
+        } else{
+          document.getElementById("joinbutton").innerHTML = "Join";
+          document.getElementById("joinbutton").style.backgroundColor = "#52abff";
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
     }
   } else {
 
@@ -601,6 +698,7 @@ function showEventDetails(title, date, place, duration, description) {
   }
 
   panel.classList.add('show-panel');
+  setTimeout(function(){eventdet=false},450);
 }
 
 function closeEventDetails() {
@@ -608,7 +706,68 @@ function closeEventDetails() {
   panel.classList.remove('show-panel');
 }
 function editevent(){
-  alert("L this is broken");
+  //open edit tnhing
+  if (document.getElementById('editDetails').classList.contains("show-panel2")){
+    closeeditdet();
+    editbar = true;
+  }
+  else{
+    showeditdet();
+    setTimeout(function(){editbar=false},450);
+  }
+  
+}
+function closeeditdet(){
+  document.getElementById('editDetails').classList.remove("show-panel2");
+}
+function showeditdet(){
+  document.getElementById('editDetails').classList.add("show-panel2");
+}
+function sidebar(){
+  
+  if (document.getElementById('eventDetailsPanel2').classList.contains("show-panel2")){
+    closeEventDetails2();
+    infobar = true;
+  }
+  else{
+    showEventDetails2();
+    document.getElementById("joinedppl").innerHTML = '';
+    let eventtitle = document.getElementById("eventTitleDisplay").textContent;
+    var textlines = [];
+    fetch(encodeURIComponent(eventtitle)+'.txt')
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.text();
+      })
+      .then(data => {
+        textLines = data.split('\n')
+        
+        for (i = 0; i<textLines.length;i++){
+          if (textLines[i]) {
+          
+              document.getElementById("joinedppl").innerHTML += textLines[i] + "<br>";
+          }
+         
+        }
+        
+      })
+      .catch(error => {
+          console.error('There was a problem with fetching the text file:', error);
+      });
+    setTimeout(function(){infobar=false},450)
+  }
+}
+
+function showEventDetails2(){
+  const panel = document.getElementById('eventDetailsPanel2');
+  panel.classList.add('show-panel2');
+  
+}
+function closeEventDetails2() {
+  const panel = document.getElementById('eventDetailsPanel2');
+  panel.classList.remove('show-panel2');
 }
 
 function changetochat(){
@@ -716,4 +875,51 @@ window.addEventListener("keypress", function(event) {
 
 //just do like 5 seconds, it doesnt matter too much anyways
 displaychat();
+
 setInterval(displaychat,5000);
+//editing stuff
+$('#eventForm').on('submit', function(e) {
+    e.preventDefault(); // Prevent form submission from redirecting
+  alert(document.getElementById("eventTitleDisplay").innerHTML)
+
+    var formData = {
+        eventTitle: document.getElementById("eventTitleDisplay").innerHTML,
+
+        newEventTitle: $('#eventTitle').val(),
+        eventDate: $('#eventDate').val(),
+        eventDuration: $('#eventDuration').val(),
+        eventPlace: $('#eventPlace').val(),
+        eventDescription: $('#eventDescription').val()
+    };
+    alert(JSON.stringify(formData));
+  $.ajax({
+      type: 'POST',
+      url: 'updateJson.php',
+      data: JSON.stringify(formData),  // Convert formData object to JSON
+      contentType: 'application/json', // Make sure the content type is JSON
+      success: function(response) {
+          console.log(response);  // Inspect response
+      },
+      error: function(xhr, status, error) {
+          alert('An error occurred: ' + error);
+      }
+  });
+
+});
+window.addEventListener('scroll', function() {
+  const siteHeader = document.getElementById('siteheader');
+  if (window.scrollY > 50) {
+    siteHeader.classList.add('scrolled');
+  } else {
+    siteHeader.classList.remove('scrolled');
+  }
+});
+
+function checkif(){
+  if($('#eventTitle').val() != ""||
+$('#eventDate').val() != ""|| $('#eventDuration').val() != ""||$('#eventPlace').val()!=""|| $('#eventDescription').val()!=""){
+    document.getElementById("submit-btn123").textContent = "Update Event";
+  } else{
+    document.getElementById("submit-btn123").textContent = "Delete Event";
+  }
+}

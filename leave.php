@@ -7,10 +7,12 @@ $data = json_decode($json, true);
 
 // Extract title and name from the data
 $title = isset($data['title']) ? $data['title'] : null;
+print_r($title);
 $name = isset($data['name']) ? $data['name'] : null;
 
 // Define the file path
 $filePath = __DIR__ . "/" . $title . ".txt";
+
 
 // Read the file contents into an array of lines
 if (file_exists($filePath)) {

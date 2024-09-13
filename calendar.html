@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
 
     <style>
 
@@ -13,7 +15,7 @@
 </head>
 <body>
     <div id="siteheader">
-        <div id="Logoname" >YOUTH4GOOD</div>
+        <div id="Logoname" >Youth4Good</div>
         <div id = "siteheader-content">
           <span id = "overview" onclick="transitionToPage('index.php')" >Overview</span>
           <span id = "overview" onclick="transitionToPage('calendar.html')" class = "currentpage">Calendar</span>
@@ -21,7 +23,7 @@
       </div>
       
       <div id="dropdiv" class="dropdown">
-        <button class = "adminonly" onclick="createEvent1()" class="dropbtn">Create Event</button>
+        <button id = "createeventbutton" class = "adminonly" onclick="createEvent1()" class="dropbtn">Create Event</button>
         <div id="myDropdown" class="dropdown-content">
           <span id = "crev">CREATE AN EVENT</span>
           <span> <div class="event-form">
@@ -30,7 +32,7 @@
           </div></span>
           <span><div class="event-form">
                 <input type="text" id="eventLocation" placeholder="Event Location" />
-                 <input type="text" id="eventDuration" placeholder="Event Event Duration" />
+                 <input type="number" id="eventDuration" placeholder="Event Event Duration" />
             </div></span>
           <span id = "lastform"><div  class="event-form">
                   <input type="text" id="eventDescription" placeholder="Event Description" />
@@ -54,18 +56,49 @@
         </div>
     </div>
 
-    <div id="eventDetailsPanel" class="event-details-panel">
-        <h1 id="eventTitleDisplay">Event Title</h1>
-        <h2 id="eventDateDisplay">Event Date</h2>
-        <h2 id="eventPlaceDisplay">Event Place</h2>
-        <h2 id="eventLocationDisplay">Event Duration</h2>
-        <h2 id="eventDescriptionDisplay">Event Description</h2>
+    <div id="eventDetailsPanel2" class="event-details-panel2">
+           <h1 class = "joined">Joined</h1>
+            <h2 class = "joined" id = "joinedppl"></h2>
 
-        <button id = "joinbutton" onclick = "joinEvent()">Join</button>
-        <button id = "closeevent" onclick="closeEventDetails()">Close</button>
-         
+        </div>
+        <div id = "editDetails" class = "event-details-panel2">
+            <form id="eventForm" onsubmit="return false;">
+                <label for="eventTitle">Event Title:</label>
+                <br>
+                <input class = "sidebarform"  type="text" id="eventTitle" name="eventTitle" required><br><br>
 
-    </div>
+                <label for="eventDate">Event Date:</label>
+                <br>
+                <input class = "sidebarform"  type="date" id="eventDate" name="eventDate" required><br><br>
+
+                <label for="eventDuration">Event Duration (hours):</label>
+                <br>
+                <input class = "sidebarform"  type="number" id="eventDuration" name="eventDuration" required><br><br>
+
+                <label for="eventPlace">Event Place:</label>
+                <br>
+                <input class = "sidebarform"  type="text" id="eventPlace" name="eventPlace" required><br><br>
+
+                <label for="eventDescription">Event Description:</label>
+                <br>
+                <textarea class = "sidebarform" id="eventDescription" name="eventDescription" required></textarea><br><br>
+
+                <button type="submit" class = "sidebarbtn">Submit Changes</button>
+            </form>
+        </div>
+        <div id="eventDetailsPanel" class="event-details-panel">
+            <h1 id="eventTitleDisplay">Event Title</h1>
+            <h2 id="eventDateDisplay">Event Date</h2>
+            <h2 id="eventPlaceDisplay">Event Place</h2>
+            <h2 id="eventLocationDisplay">Event Duration</h2>
+            <h2 id="eventDescriptionDisplay">Event Description</h2>
+
+            <l>Members: </l><l id = "mcount">0</l><br>
+            <button class = "eventDetPanBTN" id = "closeevent" onclick="sidebar()">Info</button>
+            <button class = "eventDetPanBTN" id = "joinbutton" onclick = "joinEvent()">Join</button>
+            <button id = "editevent" class = "adminonly" onclick="editevent()">Edit</button>
+            
+        </div>
 
 
     <script src="script.js"></script>
