@@ -19,14 +19,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div id = "placeholder">
 
-    </div>
     <div id="siteheader">
         <div id="Logoname" >YOUTH4GOOD</div>
         <div id = "siteheader-content">
             <span id = "overview" onclick="transitionToPage('index.html')" class = "currentpage">Overview</span>
-            <span id = "overview" onclick="transitionToPage('calendar.html')">Calendar</span>
         </div>
     </div>
     
@@ -39,25 +36,45 @@
             <h2>Our mission is to develop leadership skills and good citizenship practices in youngsters through community service.</h2>
         </div>
     </div>
-    
 
-    <div class="calendar-container">
-        <div class="calendar-header">
-            <h2>Event Calendar</h2>
-            <h3 id="month"></h3>
-            <span>
-                <button id="prevMonth" onclick="changeMonth(-1)"> &lt; </button>
-                <button id="nextMonth" onclick="changeMonth(1)"> &gt; </button>
-            </span>
+    
+    
+    <div id = "contentcalendar">
+        <button id = "createeventbutton" class = "adminonly" onclick="createEvent1()" class="dropbtn">Create Event</button>
+        <div id="myDropdown" class="dropdown-content">
+          <span id = "crev">CREATE AN EVENT</span>
+          <span> <div class="event-form">
+              <input type="text" id="eventTitle" placeholder="Event Title" />
+              <input type="date" id="eventDate" />
+          </div></span>
+          <span><div class="event-form">
+                <input type="text" id="eventLocation" placeholder="Event Location" />
+                 <input type="number" id="eventDuration" placeholder="Event Event Duration" />
+            </div></span>
+          <span id = "lastform"><div  class="event-form">
+                  <input type="text" id="eventDescription" placeholder="Event Description" />
+              <button id = "addev" onclick="addEvent()">Add Event</button>
+              </div></span>
+
         </div>
-        <div class="calendar-grid" id="calendarGrid">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h2>Event Calendar</h2>
+                <h3 id="month"></h3>
+                <span>
+                    <button id="prevMonth" onclick="changeMonth(-1)"> &lt; </button>
+                    <button id="nextMonth" onclick="changeMonth(1)"> &gt; </button>
+                </span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+            </div>
         </div>
     </div>
+    
     <div id="eventDetailsPanel2" class="event-details-panel2">
-       <h1 class = "joined">Joined</h1>
-        <h2 class = "joined" id = "joinedppl"></h2>
-       <h1>Avaliable</h1>
-        <h2 id = "avaliableppl"></h2>
+       <h1 class = "joined">Joined: </h1>
+        <h2 id = "joinedppl"></h2>
+       
 
 
     </div>
@@ -95,9 +112,9 @@
 
         <l>Members: </l><l id = "mcount">0</l><br>
         <button class = "eventDetPanBTN" id = "changechat" onclick = "changetochat()">Change Chat</button>
-
-        <button class = "eventDetPanBTN" id = "closeevent" onclick="sidebar()">Info</button>
         <button class = "eventDetPanBTN" id = "joinbutton" onclick = "joinEvent()">Join</button>
+        <button class = "adminonly" id = "closeevent" onclick="sidebar()">Info</button>
+        
         <button id = "editevent" class = "adminonly" onclick="editevent()">Edit</button>
     </div>
 

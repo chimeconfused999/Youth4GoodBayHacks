@@ -7,46 +7,66 @@
 
 body {
   opacity: 0;
-  background-color:#c4e7f2;
+  background-color:#ffffff;
   padding-bottom:20px;
   overflow-x: hidden;
   transition: opacity .3s;
+  
+}
+@keyframes bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  30% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-#placeholder{
-   background: linear-gradient(to top, #09203f 0%, #537895 100%);
-  position: absolute; /* Make the header fixed at the top */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 180px;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-  z-index: 10;
+.bounce-in {
+  animation: bounce 1s ease;
 }
+
+
 #siteheader {
-  background: none;
+
+  background: radial-gradient(circle at 44.1% 78.8%,#071931 0%,  #374f62 99.4%);
+
   color:white;
   display: flex;
   opacity: 1;
   align-items: center;
+  padding-right:50px;
   position: fixed; /* Make the header fixed at the top */
   top: 0;
   left: 0;
   justify-content: space-between;
-  z-index: 10;
+  z-index: 121;
   width: 100%;
-  height: 75px;
-  
+  height: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding-right: 50px;
-  transition-duration:0.3s;
+  transition-duration: 0.3s;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, height 0.3s;
 }
-body > *:not(#siteheader):not(#placeholder) {
-  margin-top: 150px; /* Same as the header height */
+.joinedpple{
+  position:relative;
+  z-index:11111;
+  background-color:black;
+  color:white;
+}
+body > *:not(#siteheader):not(#placeholder):not(.event-details-panel2) {
+  margin-top: 80px; /* Same as the header height */
 }
 
 
 #siteheader.scrolled {
-  height: 75px;
+  height:80px;
   color:black;
   background: white; /* Remain white when scrolled */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle shadow change */
@@ -54,20 +74,29 @@ body > *:not(#siteheader):not(#placeholder) {
 
 #siteheader #Logoname, 
 #siteheader #siteheader-content span {
+  
+  color: white; /* Initial text color black */
+}
+#siteheader #Logoname, 
+#siteheader{
+  font-size:1.8rem;
   color: white; /* Initial text color black */
 }
 
 #siteheader.scrolled #Logoname, 
 #siteheader.scrolled #siteheader-content span {
+  font-size:1.5rem;
+  text-shadow: none;
   color: black; /* Keep text black when scrolled */
 }
 
+
 #Logoname {
   filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
-  margin-right: 15px;
   margin-left: 30px;
   min-width: 30px;
   font-size:1.5rem;
+  transition-duration:0.2s;
   font-weight: bold;
   width: auto;
   height: 75px;
@@ -110,7 +139,10 @@ body > *:not(#siteheader):not(#placeholder) {
   width: 100%;
   z-index: 1; /* Ensure TITLE is below siteheader */
   position: relative;
-  padding: 70px;
+  
+  padding: 40px;
+  padding-bottom:40px;
+  padding-top:110px;
   background-color:#ffffff;
   display: flex;
   font-weight: 900;
@@ -138,7 +170,6 @@ body > *:not(#siteheader):not(#placeholder) {
   margin: 0 auto;
    margin-top: 20px;
   text-align: center;
-  margin-bottom: 15px;
   font-weight: normal;
 }
 
@@ -164,15 +195,21 @@ body > *:not(#siteheader):not(#placeholder) {
 
 .calendar-container {
   max-width: 1000px;
-  
+  border: 30px solid #d6edf5;
   margin: 50px auto;
-  margin-top: 20px;
+
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
+#contentcalendar{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width:100%;
+  background-color:#bee2ee;
+  padding-top:40px;
+  padding-bottom:70px;
+}
 
 
 .calendar-header {
@@ -219,6 +256,7 @@ body > *:not(#siteheader):not(#placeholder) {
   text-align: center;
   font-size: 12px;
 }
+
 .avbut {
   background-color: #52abff;
   color: #fff;
@@ -234,15 +272,14 @@ body > *:not(#siteheader):not(#placeholder) {
   font-size: 12px;
 }
 .eventDetPanBTN{
-  border: none;
   outline: none;
   background: none;
   background-color: #52abff;
   color: #fff;
-  padding: 17.5px;
+  width:80%;
   margin: 0 auto;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  border:2px solid #0b2e32;
+  padding:3px;
   border-radius: 4px;
   margin-top: 10px;
   display: block;
@@ -269,11 +306,13 @@ body > *:not(#siteheader):not(#placeholder) {
 .event-details-panel h1 {
   font-weight: bold;
   font-size: 1.5rem; 
+   font-family: 'Arial Black', sans-serif;
 }
 
 .event-details-panel h2 {
   font-weight: normal;
   font-size: 1.25rem;
+  
 }
 
 .event-details-panel2 {
@@ -281,14 +320,14 @@ body > *:not(#siteheader):not(#placeholder) {
   position: fixed;
   top:50%;
   transform: translateY(-50%);
-  left: -100%; /* Initially hide the sidebar */
+  left: -100%; 
   width: 25vw;
   height: 100vh;
   background-color: #ededed;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
   text-align: center;
-  transition: left 0.4s ease; /* Transition for 'left' property */
+  transition: left 0.4s ease; 
   z-index: 1001;
 }
 .event-details-panel2 h1 {
@@ -312,13 +351,14 @@ table {
   width: 100%;
 }
 
+
 .dropbtn {
   background-color: #0084ff;
   border-radius:5px;
-  outline:3px solid lightgray;
+
+  border: 2px solid #154761;
   color: white;
-  border: none;
-  padding: 10px;
+  padding: 8px;
   cursor: pointer;
   transition-duration: 0.5s;
 }
@@ -366,8 +406,8 @@ table {
   box-shadow: 0px 3px 21px;
   justify-content: left;
   display: none;
-  top: 40px;
-  left:80px;
+  margin-left:45px;
+  margin-top:15px;
   position: absolute;
   transform: translate(-80px, 0px);
   background-color: #ebebeb;
@@ -503,35 +543,15 @@ table {
 
 #closeevent{
   margin-top:10px;
-  width: 50%;
+  width: 40%;
   height: 25%;
-  border: 1px solid black;
-  border-radius: 5px;
 }
 #editevent{
   margin-top:10px;
-  width: 50%;
+  width: 40%;
   height: 25%;
-  border: 1px solid black;
-  border-radius: 5px;
-}
-#changechat {
-    padding: 1px;
-    margin-top: 10px;
-    width: 50%;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-#joinbutton{
-  padding: 1px;
-  margin: 0 auto;
-  margin-top: 10px;
-  width: 50%;
-  border: 1px solid black;
-  border-radius: 5px;
-  
-}
 
+}
 /*#notificationBtn{
   border:none;
   background: none;
@@ -590,3 +610,31 @@ table {
   color:white;
 }
 
+.trail {
+  position: absolute;
+  border-radius: 50%;
+  z-index:10000;
+  width: 15px;
+  height: 15px;
+  transform-translate: -50% -50%;
+  background-color: rgb(77, 203, 234, 0.8);
+  pointer-events: none;
+  animation: fade 0.8s ease-out forwards;
+}
+
+@keyframes fade {
+  0% {
+      opacity: 1;
+      transform: scale(1);
+  }
+  100% {
+      opacity: 0;
+      transform: scale(0);
+  }
+}
+
+#createeventbutton{
+  border: 2px solid lightgray;
+  position:relative;
+  left:50px;
+}

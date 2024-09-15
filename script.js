@@ -1,4 +1,4 @@
-//localStorage.setItem("name" , "kaizhang")
+localStorage.setItem("name" , "kaizhang")
 let events = []
 var calendarGrid;
 var monthElement;
@@ -36,6 +36,23 @@ function startAfterPreload(){
   setTimeout(function() {
     document.querySelector('body').style.opacity = 1;
   }, 50);
+
+
+  const textElements = document.querySelectorAll('body *');
+  textElements.forEach(element => {
+    if (element.textContent.trim()) { 
+      
+      element.classList.add('bounce-in');
+    }
+  });
+
+
+  setTimeout(function() {
+    textElements.forEach(element => {
+      element.classList.remove('bounce-in');
+    });
+  }, 1000); 
+  
 }
 
 window.transitionToPage = function(href, id) {
@@ -253,6 +270,9 @@ function createCalendar() {
           (year === currentYear && currentMonthIndex+1 === currentMonth2 && day >= currentDay)) {
           //avaliablebutton(dayDiv, currentMonthIndex+1, day, year);
       }
+      if (year == currentYear && currentMonthIndex+1 == currentMonth2 && day == currentDay) {
+        dayDiv.style.backgroundColor = "lightblue";
+      }
 
   }
 }
@@ -340,10 +360,14 @@ function send(){
 
 
 function addJoinButtonAndEvent(dayDiv, eventForDay) {
+
+  
   // Create the Join button
   const joinbtn = document.createElement('button');
   joinbtn.id = "joinbtn";
   joinbtn.innerHTML = 'Join';
+  
+  
   //   joinbtn.addEventListener('click', function() {
   
   // // Increment the member count when the join button is clicked
@@ -477,6 +501,7 @@ document.body.addEventListener('click', function (event) {
     }
   }
   if (!event.target.closest('.event-details-panel') && document.getElementById("eventDetailsPanel").classList.contains("show-panel") && eventdet == false && infobar == true && editbar == true && !event.target.closest('.event')){
+    
     eventdet = true;
     closeEventDetails();
   }
@@ -513,6 +538,7 @@ function addEvent2( title, date , place, duration, description) {
   else if (year === currentYear && month === currentMonth2 && day < currentDay) {
       red = true;
   }
+  
 
   const eventplace = place;
   const eventDuration = duration +" hour(s)";
@@ -535,7 +561,7 @@ function addEvent2( title, date , place, duration, description) {
       eventElement.textContent = eventTitle;
 
     eventElement.addEventListener('click', function () {
-
+      
         showEventDetails(eventTitle || "", eventDate || "", eventplace || "", eventDuration || "", eventDescription || "");
     });
 
@@ -633,6 +659,81 @@ function showEventDetails(title, date, place, duration, description) {
   document.getElementById('eventPlaceDisplay').textContent = place;
   document.getElementById('eventLocationDisplay').textContent = duration;
   document.getElementById('eventDescriptionDisplay').textContent = description;
+  const timezone = 'America/Los_Angeles'; // Example: Pacific Time (US & Canada)
+
+  // Get the current date and time
+  const now = new Date();
+
+  // Format the date and time in the specified timezone
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const formatterTime = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false, // Use 24-hour format
+  });
+
+  // Get the formatted date in MM/DD/YYYY format
+  const eformattedDate = formatter.format(now);
+  const formattedTime = formatterTime.format(now);
+
+  // Rearrange the formattedDate to be in YYYY-MM-DD format
+  const [month, day, year] = eformattedDate.split('/');
+  const formattedDate = `${year}-${month}-${day}`;
+
+  console.log(formattedDate); // Output: 2024-09-13, 22:14:49
+  fetch('data.json')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parse the JSON data
+  })
+  .then(data => {       
+    
+    for (let i = 0; i < data.length; i++) {
+      if(data[i].title == title){
+        const event = data[i];
+
+        // Extract event hours and minutes, converting to numbers for comparison
+        const eventHours = parseInt(event.duration.slice(0, 2), 10);
+        const eventMinutes = parseInt(event.duration.slice(3, 5), 10);
+
+        // Extract current hours and minutes, converting to numbers for comparison
+        const currentHours = parseInt(formattedTime.slice(0, 2), 10);
+        const currentMinutes = parseInt(formattedTime.slice(3, 5), 10);
+        alert(eventMinutes)
+
+        // Ensure the event date is the same as today's date
+        const isSameDay = event.data === formattedDate;
+
+        // Check if the event has started by comparing hours and minutes
+        const isEventStarted = (
+            (eventHours < currentHours) || // If the event started in a previous hour
+            (eventHours === currentHours && eventMinutes <= currentMinutes) // If it's the same hour, check minutes
+        );
+        alert(event.data) 
+        alert(formattedDate)
+        // If both conditions are met, update the button text
+        if (isSameDay && isEventStarted) {
+            document.getElementById("joinbutton").textContent = "ATTENDANCE STARTED";
+            break; // Exit loop as soon as attendance starts for any event
+        }
+      }
+    }
+
+
+
+  })
+  .catch(error => {
+      console.error('There was a problem with fetching the text file:', error);
+  });
   
 
     
@@ -646,6 +747,7 @@ function showEventDetails(title, date, place, duration, description) {
   const eventDay = parseInt(eventDate.split('-')[2],10);
   let joinButton = document.getElementById('joinbutton');
   //add eventDay == currentDay later;
+  
   if (eventYear == currentYear && eventMonth == currentMonth2) {
 
     if (joinButton) {
@@ -733,7 +835,7 @@ function sidebar(){
     showEventDetails2();
     document.getElementById("joinedppl").innerHTML = '';
     let eventtitle = document.getElementById("eventTitleDisplay").textContent;
-    var textlines = [];
+    var textLines = [];
     fetch(encodeURIComponent(eventtitle)+'.txt')
       .then(response => {
           if (!response.ok) {
@@ -744,10 +846,60 @@ function sidebar(){
       .then(data => {
         textLines = data.split('\n')
         
-        for (i = 0; i<textLines.length;i++){
+        
+        for (let i = 0; i<textLines.length;i++){
           if (textLines[i]) {
+              alert(textLines[i])
           
-              document.getElementById("joinedppl").innerHTML += textLines[i] + "<br>";
+              const nameElement = document.createElement('span');
+              nameElement.id = textLines[i]
+              nameElement.textContent = textLines[i]; // Set the name text
+
+              // Create a button
+              const button = document.createElement('button');
+              button.textContent = "Here"; // Set button text
+            button.id = document.getElementById("eventTitleDisplay").textContent;
+            button.className = "joinbutton"  
+            
+            button.onclick = function() {
+                data = {
+                  buttonId: nameElement.id,
+                  filePat: document.getElementById("eventTitleDisplay").textContent
+                }
+                  //alert("comming soon")
+                // change txt file and add checkmark
+              $.ajax({
+                  type: 'POST',
+                  url: 'mark.php', // PHP file to process the request
+                  data: data,
+                  success: function(response) {
+                      // Display success message or error from the PHP response
+                      $('#responseMessage').text(response);
+                  },
+                  error: function(xhr, status, error) {
+                      // Display error if the request fails
+                      $('#responseMessage').text('An error occurred: ' + error);
+                  }
+              });
+              };
+
+              // Create a <br> element
+              const lineBreak = document.createElement('br');
+            nameElement.style.display = 'block';
+            button.style.display = 'block';
+            lineBreak.style.display = 'block';
+            nameElement.className = "joinedpple";
+            button.className = "joinedpple";
+            lineBreak.className = "joinedpple";
+            
+
+              // Append all elements to the container
+              const container = document.getElementById('joinedppl');
+              container.appendChild(nameElement);  // Add the name
+              container.appendChild(button);      // Add the button
+              container.appendChild(lineBreak);   // Add the line break
+              
+              
           }
          
         }
@@ -880,7 +1032,7 @@ setInterval(displaychat,5000);
 //editing stuff
 $('#eventForm').on('submit', function(e) {
     e.preventDefault(); // Prevent form submission from redirecting
-  alert(document.getElementById("eventTitleDisplay").innerHTML)
+
 
     var formData = {
         eventTitle: document.getElementById("eventTitleDisplay").innerHTML,
@@ -891,7 +1043,7 @@ $('#eventForm').on('submit', function(e) {
         eventPlace: $('#eventPlace').val(),
         eventDescription: $('#eventDescription').val()
     };
-    alert(JSON.stringify(formData));
+    
   $.ajax({
       type: 'POST',
       url: 'updateJson.php',
@@ -904,6 +1056,7 @@ $('#eventForm').on('submit', function(e) {
           alert('An error occurred: ' + error);
       }
   });
+  location.reload()
 
 });
 window.addEventListener('scroll', function() {
@@ -922,4 +1075,28 @@ $('#eventDate').val() != ""|| $('#eventDuration').val() != ""||$('#eventPlace').
   } else{
     document.getElementById("submit-btn123").textContent = "Delete Event";
   }
+}
+document.addEventListener('mousemove', (e) => {
+  createTrail(e.pageX, e.pageY-85);
+});
+function randomValueInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
+function createTrail(x, y) {
+  const trail = document.createElement('div');
+  trail.classList.add('trail');
+  trail.style.backgroundColor =  `rgba(${randomValueInRange(150, 200)}, ${randomValueInRange(200, 255)}, ${randomValueInRange(240, 255)}, 0.8)`;
+  document.body.appendChild(trail);
+
+  // Position the trail at the mouse coordinates
+  trail.style.left = `${x-5}px`;  // Offset horizontally
+  trail.style.top = `${y}px`;   // Offset vertically
+
+  // Remove the trail after animation completes
+  setTimeout(() => {
+      trail.remove();
+  }, 800);  // Matches the animation duration
 }
