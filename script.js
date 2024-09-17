@@ -938,8 +938,8 @@ function chatsend() {
     var chatbox = document.getElementById("chatbox");
     if(chatbox.includes("@gpt")){
       (async () => {
-        const result = await chatbotMessage("What is the event schedule?");
-        console.log("Chatbot Response:", result);
+        const result = await chatbotMessage(chatbox.value,localStorage.getItem("curchat"));
+        alert("Chatbot Response:", result);
       })();
     }
     if (chatbox.value.trim() !== "" && chatbox.value.trim().length <= 1500) {
