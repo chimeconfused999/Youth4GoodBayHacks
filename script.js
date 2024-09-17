@@ -11,11 +11,15 @@ let currentYear;
 let eventdet = true;
 let editbar = true;
 let infobar = true;
+let chatbar = true;
+var elmnt = document.getElementById("mydiv");
+var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
 });
-
 function startAfterPreload(){
 
   checkName();
@@ -24,36 +28,44 @@ function startAfterPreload(){
   addExistingEvents();
 
   if(localStorage.getItem("curchat") == null){
-    localStorage.setItem("curchat","general")
+    localStorage.setItem("curchat","general");
   }
-  if (localStorage.getItem("curchat") == "general" && document.getElementById("generalbut")) {
-      document.getElementById("generalbut").style.display = "none";
-  }
-  else if (document.getElementById("generalbut")){
-      document.getElementById("generalbut").style.display = "block";
+
+  if (localStorage.getItem("curchat") == "general" && document.getElementById("chatbut2")) {
+    document.getElementById("chatbut2").style.display = "none";
+  } else if (document.getElementById("chatbut2")){
+    document.getElementById("chatbut2").style.display = "block";
   }
 
   setTimeout(function() {
     document.querySelector('body').style.opacity = 1;
   }, 50);
 
-
+  // Bounce-in effect
   const textElements = document.querySelectorAll('body *');
   textElements.forEach(element => {
-    if (element.textContent.trim()) { 
-      
+    if (element.textContent.trim() && element.id !== "createeventbutton" && element.id !== "chaticon2" && element.id !== "chaticonimg") {
       element.classList.add('bounce-in');
     }
   });
 
-
+  // Remove bounce-in class after 1 second
   setTimeout(function() {
     textElements.forEach(element => {
-      element.classList.remove('bounce-in');
+      if (element.id !== "createeventbutton" && element.id !== "chat2icon" && element.id !== "chaticonimg") {
+        element.classList.remove('bounce-in');
+      }
     });
   }, 1000); 
-  
+
+  // Set opacity to 1 after preload, avoid setting display
+  document.getElementById("chaticon2").style.display= 'none';
+  setTimeout(function() {
+    document.getElementById("chaticon2").style.display= 'block';
+  }, 900); // Delay slightly to prevent flickering
 }
+
+
 
 window.transitionToPage = function(href, id) {
   document.querySelector('body').style.opacity = 0
@@ -66,6 +78,7 @@ window.transitionToPage = function(href, id) {
 function preloadImages(callback) {
   var imageUrls = [
           "Croppedbackground1.png",
+          "bell.png"
   ]
   // if (document.title == "index"){
   //     var imageUrls = [
@@ -221,7 +234,8 @@ function calendar(){
        .then(data => {
          for (i=0; i<data.length; i++){
            l=data[i].data.split("-");
-           if(l[0]<currentYear || l[0] == currentYear && l[1]<currentMonth2 || l[0] == currentYear && l[1] == currentMonth2 && l[2]<currentDay ){
+           if(l[0]<= currentYear && l[1]<currentMonth2 || l[0] == currentYear && l[1] == currentMonth2 && l[2]+7<currentDay ){
+             
              //funny thing
              var filename = encodeURIComponent(data[i].title) + ".txt";
 
@@ -238,6 +252,7 @@ function calendar(){
                          $('#responseMessage').text('An error occurred while deleting the file.');
                      }
                  });
+                
              }
            } 
          }
@@ -322,7 +337,8 @@ function avaliablebutton(dayDiv, currentMonthIndex, day,year){
 function switchtogeneral(){
   localStorage.setItem("curchat","general")
   displaychat()
-  document.getElementById("generalbut").style.display = "none";
+  document.getElementById("chatTitle").innerHTML = localStorage.getItem("curchat");
+  document.getElementById("chatbut2").style.display = "none";
 }
 //json testing
 function send(){
@@ -500,7 +516,7 @@ document.body.addEventListener('click', function (event) {
       }
     }
   }
-  if (!event.target.closest('.event-details-panel') && document.getElementById("eventDetailsPanel").classList.contains("show-panel") && eventdet == false && infobar == true && editbar == true && !event.target.closest('.event')){
+  if (!event.target.closest('.event-details-panel') && document.getElementById("eventDetailsPanel").classList.contains("show-panel") && eventdet == false && infobar == true && editbar == true && !event.target.closest('.event') && chatbar == true){
     
     eventdet = true;
     closeEventDetails();
@@ -512,6 +528,10 @@ document.body.addEventListener('click', function (event) {
   if (!event.target.closest('.event-details-panel2') && editbar == false){
     editbar = true;
     closeeditdet();
+  }
+  if (!event.target.closest('.mydiv') && !event.target.closest('.chatbuttonicon') && chatbar == false){
+    chatbar = true;
+    closechatbar();
   }
   
 });
@@ -553,7 +573,7 @@ function addEvent2( title, date , place, duration, description) {
   if (payPiv) {
       const eventElement = document.createElement('div');
       if (red){
-
+        
         eventElement.style.backgroundColor = "orangered";
         eventElement.style.color = "black";
       }
@@ -708,7 +728,7 @@ function showEventDetails(title, date, place, duration, description) {
         // Extract current hours and minutes, converting to numbers for comparison
         const currentHours = parseInt(formattedTime.slice(0, 2), 10);
         const currentMinutes = parseInt(formattedTime.slice(3, 5), 10);
-        alert(eventMinutes)
+
 
         // Ensure the event date is the same as today's date
         const isSameDay = event.data === formattedDate;
@@ -718,14 +738,17 @@ function showEventDetails(title, date, place, duration, description) {
             (eventHours < currentHours) || // If the event started in a previous hour
             (eventHours === currentHours && eventMinutes <= currentMinutes) // If it's the same hour, check minutes
         );
-        alert(event.data) 
-        alert(formattedDate)
+        
         // If both conditions are met, update the button text
+        
         if (isSameDay && isEventStarted) {
+          
             document.getElementById("joinbutton").textContent = "ATTENDANCE STARTED";
             break; // Exit loop as soon as attendance starts for any event
         }
+        
       }
+     
     }
 
 
@@ -746,9 +769,11 @@ function showEventDetails(title, date, place, duration, description) {
   const eventMonth = parseInt(eventDate.split('-')[1],10);
   const eventDay = parseInt(eventDate.split('-')[2],10);
   let joinButton = document.getElementById('joinbutton');
+
   //add eventDay == currentDay later;
-  
-  if (eventYear == currentYear && eventMonth == currentMonth2) {
+ 
+  if (eventYear == currentYear && eventMonth == currentMonth2 && eventDay > currentDay) {
+    
 
     if (joinButton) {
       textLines = []
@@ -777,7 +802,8 @@ function showEventDetails(title, date, place, duration, description) {
         }
 
         // Check if the user's name is in the list of names for this event
-        
+        document.getElementById("closeevent").style.display = "block";
+        document.getElementById("changechat").style.display = "block";
         if (textLines.includes(userName) && document.getElementById("eventTitleDisplay").innerHTML.trim() == title ) {
           
           // If the name is already in the list, show the user they have already joined
@@ -793,9 +819,13 @@ function showEventDetails(title, date, place, duration, description) {
       });
     }
   } else {
+    
 
     if (joinButton) {
-        joinButton.style.display = 'none';
+      document.getElementById("joinbutton").style.display = "none";
+      document.getElementById("closeevent").style.display = "none";
+      document.getElementById("changechat").style.display = "none";
+      //document.getElementById("closebutton").display = "none";
     }
   }
 
@@ -924,7 +954,14 @@ function closeEventDetails2() {
 
 function changetochat(){
   localStorage.setItem("curchat", document.getElementById('changechat').innerHTML)
-  document.getElementById("generalbut").style.display = "block";
+  eventdet = true;
+  closeEventDetails();
+  document.getElementById("chatbut2").style.display = "block";
+  document.getElementById("chatTitle").innerHTML = localStorage.getItem("curchat");
+  document.getElementById("mydiv").style.display = "block";
+  document.getElementById("mydiv").classList.add("myDi");
+  
+  setTimeout(function(){document.getElementById("mydiv").classList.remove("myDi");document.getElementById("mydiv").style.opacity = 1;chatbar = false;},500)
   displaychat()
 }
 
@@ -1099,4 +1136,77 @@ function createTrail(x, y) {
   setTimeout(() => {
       trail.remove();
   }, 800);  // Matches the animation duration
+}
+
+
+
+dragElement(document.getElementById("mydiv"));
+
+function dragElement(elmnt) {
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+function dragMouseDown(e) {
+  e = e || window.event;
+  e.preventDefault();
+  // Get the initial mouse cursor position
+  pos3 = e.clientX;
+  pos4 = e.clientY;
+  // Get the initial element position
+  pos1 = elmnt.offsetLeft;
+  pos2 = elmnt.offsetTop;
+  document.onmouseup = closeDragElement;
+  // Call a function whenever the cursor moves
+  document.onmousemove = elementDrag;
+}
+
+function elementDrag(e) {
+  e = e || window.event;
+  e.preventDefault();
+  // Calculate the new cursor position
+  var deltaX = e.clientX - pos3;
+  var deltaY = e.clientY - pos4;
+  // Set the element's new position
+  elmnt.style.left = (pos1 + deltaX) + "px";
+  elmnt.style.top = (pos2 + deltaY-80) + "px";
+}
+
+function closeDragElement() {
+  // Stop moving when mouse button is released
+  document.onmouseup = null;
+  document.onmousemove = null;
+}
+}
+
+document.getElementById("chaticon2").onclick = function() {
+
+  if (document.getElementById("mydiv").style.display == "block"){
+    document.getElementById("mydiv").classList.add("cDi");
+    setTimeout(function(){document.getElementById("mydiv").classList.remove("cDi");document.getElementById("mydiv").style.display = "none";    chatbar = true;},500)
+  }
+  else{
+   
+    if (localStorage.getItem("curchat") == "general" && document.getElementById("chatbut2")) {
+      document.getElementById("chatbut2").style.display = "none";
+    }
+    else if (document.getElementById("chatbut2")){
+      document.getElementById("chatbut2").style.display = "block";
+    }
+    document.getElementById("mydiv").style.display = "block";
+    document.getElementById("chatTitle").innerHTML = localStorage.getItem("curchat");
+    document.getElementById("mydiv").classList.add("myDi");
+    setTimeout(function(){document.getElementById("mydiv").classList.remove("myDi");document.getElementById("mydiv").style.opacity = 1; chatbar = false;},500)
+    displaychat()
+  }
+  
+}
+
+function closechatbar(){
+  document.getElementById("mydiv").classList.add("cDi");
+  setTimeout(function(){document.getElementById("mydiv").classList.remove("cDi");document.getElementById("mydiv").style.display = "none";     chatbar = true;},500)
 }
