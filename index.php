@@ -17,7 +17,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+    <script type="module" src="firebase.js"></script>
+    <script src="googlesignin.js"></script>
+    </head>
 <body>
 
     <div id="siteheader">
@@ -37,8 +39,6 @@
         </div>
     </div>
 
-    
-    
     <div id = "contentcalendar">
         <button id = "createeventbutton" class = "adminonly" onclick="createEvent1()" class="dropbtn">Create Event</button>
         <div id="myDropdown" class="dropdown-content">
@@ -64,6 +64,8 @@
                 <span>
                     <button id="prevMonth" onclick="changeMonth(-1)"> &lt; </button>
                     <button id="nextMonth" onclick="changeMonth(1)"> &gt; </button>
+                    <button onclick="callGoogleSignIn()" value="Google Sign In" id="googleSignIn">Google</button>
+                    <button onclick="logOut()" value="Google Sign Out" id="googleSignOut">Log Out</button>
                 </span>
             </div>
             <div class="calendar-grid" id="calendarGrid">

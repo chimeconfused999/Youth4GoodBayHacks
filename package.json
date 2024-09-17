@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@grpc/grpc-js": "^1.11.2",
+    "firebase-admin": "^12.5.0"
+  }
+}
