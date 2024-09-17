@@ -1,3 +1,4 @@
+import { chatbotMessage } from './chatgpt.js'; // Import the function
 localStorage.setItem("name" , "kaizhang")
 let events = []
 var calendarGrid;
@@ -11,6 +12,11 @@ let currentYear;
 let eventdet = true;
 let editbar = true;
 let infobar = true;
+// main.js
+
+
+// Call the function and handle its response
+
 
 document.addEventListener('DOMContentLoaded', function() {
   preloadImages(startAfterPreload);
@@ -930,7 +936,12 @@ function changetochat(){
 
 function chatsend() {
     var chatbox = document.getElementById("chatbox");
-
+    if(chatbox.includes("@gpt")){
+      (async () => {
+        const result = await chatbotMessage("What is the event schedule?");
+        console.log("Chatbot Response:", result);
+      })();
+    }
     if (chatbox.value.trim() !== "" && chatbox.value.trim().length <= 1500) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "chat.php", true);
