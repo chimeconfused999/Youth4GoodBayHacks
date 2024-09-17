@@ -938,8 +938,34 @@ function chatsend() {
     var chatbox = document.getElementById("chatbox");
     if(chatbox.includes("@gpt")){
       (async () => {
-        const result = await chatbotMessage(chatbox.value,localStorage.getItem("curchat"));
-        alert("Chatbot Response:", result);
+        const result = await chatbotMessage("What is the event schedule?",localStorage.getItem("curchat"));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "chat.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        // Disable the input field before sending the request
+        chatbox.disabled = true;
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Re-enable the input field after the response is received
+                chatbox.disabled = false;
+
+            }
+        };
+
+        const curChat = encodeURIComponent(localStorage.getItem("curchat"));
+        const name = encodeURIComponent(localStorage.getItem("name"));
+        const chatboxValue = encodeURIComponent(chatbox.value);
+
+        // Create the data string with newlines encoded as %0A
+        const data = `username=${curChat}%0A${name} %0A${chatboxValue}`;
+        xhr.send(data);
+
+        // Clear chatbox after sending
+        chatbox.value = "";
+        displaychat();
+        document.getElementById("chatContainer").scrollTop = document.getElementById("chatContainer").scrollHeight;
       })();
     }
     if (chatbox.value.trim() !== "" && chatbox.value.trim().length <= 1500) {
