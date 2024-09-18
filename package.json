@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@grpc/grpc-js": "^1.11.2",
-    "firebase-admin": "^12.5.0"
+    "firebase-admin": "^12.5.0",
+    "keytar": "^7.9.0"
   }
 }
