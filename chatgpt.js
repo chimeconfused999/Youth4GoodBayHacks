@@ -29,12 +29,21 @@ export async function chatbotMessage(message,curchat) {
                 throw new Error("Network response was not ok");
             }
             const pata = await pesponse.json();
-
+            const formatterTime = new Intl.DateTimeFormat('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false, // Use 24-hour format
+              });
+            
+              // Get the formatted date in MM/DD/YYYY format
+              
+              const formattedTime = formatterTime.format(now);
             // Create the message payload for GPT-4
             const GPT4Message = [
                 {
                     role: "system",
-                    content: `Here is all of the Event Calendar Data: ${JSON.stringify(data)}. Ignore this one if empty, but it contains information relative to the event chatroom you are in: ${JSON.stringify(pata)}.`,
+                    content: `Here is all of the Event Calendar Data: ${JSON.stringify(data)}. Ignore this one if empty, but it contains information relative to the event chatroom you are in: ${JSON.stringify(pata)}. If you are prompted, the current time is ${JSON.stringify(formattedTime)}`,
                 },
                 {
                     role: "user",
