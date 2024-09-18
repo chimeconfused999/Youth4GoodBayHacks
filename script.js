@@ -1,4 +1,4 @@
-import { chatbotMessage } from './chatgpt.js'; // Import the function
+
 localStorage.setItem("name" , "kaizhang")
 let events = []
 var calendarGrid;
@@ -934,9 +934,82 @@ function changetochat(){
   displaychat()
 }
 
+const OPENAI_API_KEY = 'your-openai-api-key-here'; // Replace with your API key
+async function chatbotMessage(message, curchat) {
+    if (curchat !== "general") {
+        try {
+            // Fetch the data from the local JSON file
+            const response = await fetch("data.json");
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            // Parse the JSON data
+            const data = await response.json();
+
+            // Fetch the chatroom-specific text data
+            const chatResponse = await fetch(`${curchat}.txt`);
+            if (!chatResponse.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const chatData = await chatResponse.text(); // Read as text since it's a `.txt` file
+
+            // Create a time formatter for the current time in 24-hour format
+            const now = new Date();
+            const formatterTime = new Intl.DateTimeFormat('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false, // Use 24-hour format
+            });
+            const formattedTime = formatterTime.format(now);
+
+            // Create the message payload for GPT-4
+            const GPT4Message = [
+                {
+                    role: "system",
+                    content: `Here is all of the Event Calendar Data: ${JSON.stringify(data)}. 
+                    Ignore this one if empty, but it contains information relative to the event chatroom you are in: ${chatData}. 
+                    If you are prompted, the current time is ${formattedTime}`,
+                },
+                {
+                    role: "user",
+                    content: message,
+                },
+            ];
+
+            // Call GPT-4
+            const GPT4Response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4",
+                    messages: GPT4Message
+                })
+            });
+
+            if (!GPT4Response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const GPT4Data = await GPT4Response.json();
+            return GPT4Data.choices[0].message.content;
+        } catch (error) {
+            console.error("Error in fetching data or calling GPT-4:", error);
+            return "There was an error processing your request.";
+        }
+    }
+}
+
+
+
 function chatsend() {
     var chatbox = document.getElementById("chatbox");
-    if(chatbox.includes("@gpt")){
+    if(chatbox.value.includes("@gpt")){
       (async () => {
         const result = await chatbotMessage("What is the event schedule?",localStorage.getItem("curchat"));
         var xhr = new XMLHttpRequest();
