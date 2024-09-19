@@ -1,0 +1,163 @@
+[debug] [2024-09-12T18:03:18.348Z] ----------------------------------------------------------------------
+[debug] [2024-09-12T18:03:18.350Z] Command:       /Users/vkumar2027/.nvm/versions/node/v20.17.0/bin/node /Users/vkumar2027/.nvm/versions/node/v20.17.0/bin/firebase init
+[debug] [2024-09-12T18:03:18.350Z] CLI Version:   13.17.0
+[debug] [2024-09-12T18:03:18.350Z] Platform:      darwin
+[debug] [2024-09-12T18:03:18.351Z] Node Version:  v20.17.0
+[debug] [2024-09-12T18:03:18.351Z] Time:          Thu Sep 12 2024 11:03:18 GMT-0700 (Pacific Daylight Time)
+[debug] [2024-09-12T18:03:18.351Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-09-12T18:03:18.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-12T18:03:18.409Z] > authorizing via signed-in user (vyom.kumar.elpaso@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/vkumar2027/Youth4GoodBayHacks
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-09-12T18:03:31.160Z] Using project from CLI flag: bay-hacks-hackathon
+[debug] [2024-09-12T18:03:31.162Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon [none]
+[debug] [2024-09-12T18:03:37.640Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon 200
+[debug] [2024-09-12T18:03:37.640Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon {"projectId":"bay-hacks-hackathon","projectNumber":"710452009234","displayName":"Bay Hacks Hackathon","name":"projects/bay-hacks-hackathon","resources":{"hostingSite":"bay-hacks-hackathon"},"state":"ACTIVE","etag":"1_f63e48c4-29ff-4b39-865c-3cf01c7b3cb0"}
+[info] i  Using project bay-hacks-hackathon (Bay Hacks Hackathon) 
+[info] 
+=== Database Setup
+[info] i  database: ensuring required API firebasedatabase.googleapis.com is enabled... 
+[debug] [2024-09-12T18:03:37.648Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com [none]
+[debug] [2024-09-12T18:03:37.649Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:03:38.105Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com 200
+[debug] [2024-09-12T18:03:38.105Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com [omitted]
+[warn] ⚠  database: missing required API firebasedatabase.googleapis.com. Enabling now... 
+[debug] [2024-09-12T18:03:38.106Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com:enable [none]
+[debug] [2024-09-12T18:03:38.107Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com:enable x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:03:38.719Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com:enable 200
+[debug] [2024-09-12T18:03:38.719Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com:enable [omitted]
+[debug] [2024-09-12T18:03:48.720Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com [none]
+[debug] [2024-09-12T18:03:48.721Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:03:49.156Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com 200
+[debug] [2024-09-12T18:03:49.157Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firebasedatabase.googleapis.com [omitted]
+[info] ✔  database: required API firebasedatabase.googleapis.com is enabled 
+[info] 
+[debug] [2024-09-12T18:03:49.163Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon [none]
+[debug] [2024-09-12T18:03:49.327Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon 200
+[debug] [2024-09-12T18:03:49.328Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon {"projectId":"bay-hacks-hackathon","projectNumber":"710452009234","displayName":"Bay Hacks Hackathon","name":"projects/bay-hacks-hackathon","resources":{"hostingSite":"bay-hacks-hackathon"},"state":"ACTIVE","etag":"1_f63e48c4-29ff-4b39-865c-3cf01c7b3cb0"}
+[debug] [2024-09-12T18:03:58.402Z] >>> [apiv2][query] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances databaseId=bay-hacks-hackathon-default-rtdb&validateOnly=true
+[debug] [2024-09-12T18:03:58.403Z] >>> [apiv2][body] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances {"type":"default_database"}
+[debug] [2024-09-12T18:03:58.963Z] <<< [apiv2][status] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances 200
+[debug] [2024-09-12T18:03:58.963Z] <<< [apiv2][body] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances {"name":"projects/710452009234/locations/us-central1/instances/bay-hacks-hackathon-default-rtdb","project":"projects/710452009234","databaseUrl":"https://bay-hacks-hackathon-default-rtdb.firebaseio.com","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2024-09-12T18:03:58.965Z] >>> [apiv2][query] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances databaseId=bay-hacks-hackathon-default-rtdb
+[debug] [2024-09-12T18:03:58.965Z] >>> [apiv2][body] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances {"type":"default_database"}
+[debug] [2024-09-12T18:03:59.406Z] <<< [apiv2][status] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances 200
+[debug] [2024-09-12T18:03:59.407Z] <<< [apiv2][body] POST https://firebasedatabase.googleapis.com/v1beta/projects/bay-hacks-hackathon/locations/us-central1/instances {"name":"projects/710452009234/locations/us-central1/instances/bay-hacks-hackathon-default-rtdb","project":"projects/710452009234","databaseUrl":"https://bay-hacks-hackathon-default-rtdb.firebaseio.com","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[info] 
+[info] Firebase Realtime Database Security Rules allow you to define how your data should be
+[info] structured and when your data can be read from and written to.
+[info] 
+[debug] [2024-09-12T18:04:00.865Z] >>> [apiv2][query] GET https://bay-hacks-hackathon-default-rtdb.firebaseio.com/.settings/rules.json [none]
+[debug] [2024-09-12T18:04:01.685Z] <<< [apiv2][status] GET https://bay-hacks-hackathon-default-rtdb.firebaseio.com/.settings/rules.json 200
+[debug] [2024-09-12T18:04:01.686Z] <<< [apiv2][body] GET https://bay-hacks-hackathon-default-rtdb.firebaseio.com/.settings/rules.json [stream]
+[info] ✔  Database Rules for bay-hacks-hackathon-default-rtdb have been written to database.rules.json. 
+[info] Future modifications to database.rules.json will update Realtime Database Security Rules when you run
+[info] firebase deploy.
+[info] 
+=== Firestore Setup
+[debug] [2024-09-12T18:04:01.690Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firestore.googleapis.com [none]
+[debug] [2024-09-12T18:04:01.690Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firestore.googleapis.com x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:04:01.892Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firestore.googleapis.com 200
+[debug] [2024-09-12T18:04:01.892Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/firestore.googleapis.com [omitted]
+[debug] [2024-09-12T18:04:01.892Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default) [none]
+[debug] [2024-09-12T18:04:02.136Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default) 200
+[debug] [2024-09-12T18:04:02.136Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default) {"name":"projects/bay-hacks-hackathon/databases/(default)","uid":"6ace13c7-8714-4df8-b8c8-8f022280fbc7","createTime":"2024-09-12T06:07:47.314404Z","updateTime":"2024-09-12T06:07:47.314404Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2024-09-12T17:04:02.175269Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","etag":"INaX6vP+vYgDMOT96OfevIgD"}
+[debug] [2024-09-12T18:04:02.137Z] database_type: FIRESTORE_NATIVE
+[debug] [2024-09-12T18:04:02.137Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-12T18:04:02.138Z] > authorizing via signed-in user (vyom.kumar.elpaso@gmail.com)
+[debug] [2024-09-12T18:04:02.138Z] [iam] checking project bay-hacks-hackathon for permissions ["firebase.projects.get"]
+[debug] [2024-09-12T18:04:02.139Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions [none]
+[debug] [2024-09-12T18:04:02.139Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:04:02.139Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-09-12T18:04:02.575Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions 200
+[debug] [2024-09-12T18:04:02.575Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions {"permissions":["firebase.projects.get"]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2024-09-12T18:04:03.722Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/releases pageSize=10&pageToken=
+[debug] [2024-09-12T18:04:03.974Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/releases 200
+[debug] [2024-09-12T18:04:03.974Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/releases {"releases":[{"name":"projects/bay-hacks-hackathon/releases/cloud.firestore","rulesetName":"projects/bay-hacks-hackathon/rulesets/e87de04d-ddd8-48f0-b503-bfe503aa6b43","createTime":"2024-09-12T06:07:49.067866Z","updateTime":"2024-09-12T06:07:49.067866Z"}]}
+[debug] [2024-09-12T18:04:03.974Z] Found ruleset: projects/bay-hacks-hackathon/rulesets/e87de04d-ddd8-48f0-b503-bfe503aa6b43
+[debug] [2024-09-12T18:04:03.975Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/rulesets/e87de04d-ddd8-48f0-b503-bfe503aa6b43 [none]
+[debug] [2024-09-12T18:04:04.092Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/rulesets/e87de04d-ddd8-48f0-b503-bfe503aa6b43 200
+[debug] [2024-09-12T18:04:04.092Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/bay-hacks-hackathon/rulesets/e87de04d-ddd8-48f0-b503-bfe503aa6b43 [omitted]
+[info] 
+[info] Firestore indexes allow you to perform complex queries while
+[info] maintaining performance that scales with the size of the result
+[info] set. You can keep index definitions in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2024-09-12T18:04:05.203Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2024-09-12T18:04:05.204Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2024-09-12T18:04:05.337Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2024-09-12T18:04:05.338Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2024-09-12T18:04:05.892Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2024-09-12T18:04:05.892Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/bay-hacks-hackathon/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/bay-hacks-hackathon/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] 
+=== Functions Setup
+[debug] [2024-09-12T18:04:05.895Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-12T18:04:05.895Z] > authorizing via signed-in user (vyom.kumar.elpaso@gmail.com)
+[debug] [2024-09-12T18:04:05.895Z] [iam] checking project bay-hacks-hackathon for permissions ["firebase.projects.get"]
+[debug] [2024-09-12T18:04:05.895Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions [none]
+[debug] [2024-09-12T18:04:05.895Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:04:05.896Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-09-12T18:04:05.966Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions 200
+[debug] [2024-09-12T18:04:05.967Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bay-hacks-hackathon:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-09-12T18:04:05.967Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-09-12T18:04:05.967Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:04:05.967Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-09-12T18:04:05.967Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/bay-hacks-hackathon
+[debug] [2024-09-12T18:04:06.335Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/cloudfunctions.googleapis.com 200
+[debug] [2024-09-12T18:04:06.335Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2024-09-12T18:04:06.372Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/runtimeconfig.googleapis.com 200
+[debug] [2024-09-12T18:04:06.372Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/bay-hacks-hackathon/services/runtimeconfig.googleapis.com [omitted]
+[info] 
+Detected existing codebase(s): default
+
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[error] Invalid codebase name. Codebase must be less than 64 characters and can contain only lowercase letters, numeric characters, underscores, and dashes.
+[info] ✔  Wrote youth4good/package.json 
+[info] ✔  Wrote youth4good/.eslintrc.js 
+[info] ✔  Wrote youth4good/index.js 
+[info] ✔  Wrote youth4good/.gitignore 
+[info] 
+=== Hosting Setup
+[debug] [2024-09-12T18:04:44.759Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon [none]
+[debug] [2024-09-12T18:04:45.087Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon 200
+[debug] [2024-09-12T18:04:45.087Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bay-hacks-hackathon {"projectId":"bay-hacks-hackathon","projectNumber":"710452009234","displayName":"Bay Hacks Hackathon","name":"projects/bay-hacks-hackathon","resources":{"hostingSite":"bay-hacks-hackathon","realtimeDatabaseInstance":"bay-hacks-hackathon-default-rtdb"},"state":"ACTIVE","etag":"1_f63e48c4-29ff-4b39-865c-3cf01c7b3cb0"}
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 

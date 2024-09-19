@@ -51,7 +51,3 @@ async function callGoogleSignIn(){
     }
 
 }
-
-
-
-

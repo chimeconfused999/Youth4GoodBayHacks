@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youth4Good Overview</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
-    <script type= "module" src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+    <!-- Firebase Core SDK (required for all Firebase services) -->
+    <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
+
+    <!-- Firebase Authentication -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js"></script>
+    <!-- Firebase Firestore (database) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script>
+    <!-- Firebase Storage (for file storage) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-storage.js"></script>
+    <!-- Firebase Analytics (optional, for analytics tracking) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-analytics.js"></script>
+    <!-- Firebase Cloud Messaging (optional, for push notifications) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-messaging.js"></script>
+    <!-- Firebase Remote Config (optional, for remote configuration) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-remote-config.js"></script>
+    <!-- Firebase Performance Monitoring (optional, for performance tracking) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-performance.js"></script>
+    <!-- Firebase Functions (optional, for calling cloud functions) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-functions.js"></script>
     <script type="module" src="firebase.js"></script>
     <script src="googlesignin.js"></script>
 </head>

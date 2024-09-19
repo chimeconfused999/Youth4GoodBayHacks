@@ -29,6 +29,8 @@ try {
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+
+
 // Attach Firebase functionality to the global `window` object
 window.firebaseApp = app;
 window.firebaseAuth = auth;
