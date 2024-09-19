@@ -47,7 +47,7 @@ function startAfterPreload(){
   const textElements = document.querySelectorAll('body *');
   textElements.forEach(element => {
     if (element.textContent.trim()) { 
-      
+
       element.classList.add('bounce-in');
     }
   });
@@ -58,7 +58,7 @@ function startAfterPreload(){
       element.classList.remove('bounce-in');
     });
   }, 1000); 
-  
+
 }
 
 window.transitionToPage = function(href, id) {
@@ -216,9 +216,9 @@ function calendar(){
 
     currentMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
    year = 2024;
-    currentMonth = new Date()
+    var currentMonth = new Date()
     currentMonthIndex = currentMonth.getMonth();
-  
+
     currentDay = currentMonth.getDate();
     currentMonth2 = currentMonth.getMonth()+1;
     currentYear = currentMonth.getFullYear();
@@ -247,12 +247,12 @@ function calendar(){
              }
            } 
          }
-       
+
        })
        .catch(error => {
          console.error('Error fetching or parsing JSON:', error);
     });
-  
+
 
     createCalendar();
 }
@@ -284,7 +284,7 @@ function createCalendar() {
 }
 
 function avaliablebutton(dayDiv, currentMonthIndex, day,year){
-  
+
   if (localStorage.getItem(`day-btn-${day}-${currentMonthIndex}-${year}`) == "Unavaliable"){
     const unavaliableButton = document.createElement('button');
     unavaliableButton.innerHTML = 'Unavaliable';
@@ -322,7 +322,7 @@ function avaliablebutton(dayDiv, currentMonthIndex, day,year){
     });
     dayDiv.appendChild(dayButton);
   }
-  
+
 }
 
 function switchtogeneral(){
@@ -336,7 +336,7 @@ function send(){
     title: document.getElementById("eventTitle").value,
     data: document.getElementById("eventDate").value,
     place: document.getElementById("eventLocation").value,
-    duration: document.getElementById("eventDuration").value,
+    duration: document.getElementById("eventStart").value + "-" + document.getElementById("eventEnd").value,
     description: document.getElementById("eventDescription").value,
     name: localStorage.getItem("name")
   }
@@ -367,15 +367,15 @@ function send(){
 
 function addJoinButtonAndEvent(dayDiv, eventForDay) {
 
-  
+
   // Create the Join button
   const joinbtn = document.createElement('button');
   joinbtn.id = "joinbtn";
   joinbtn.innerHTML = 'Join';
-  
-  
+
+
   //   joinbtn.addEventListener('click', function() {
-  
+
   // // Increment the member count when the join button is clicked
   // eventForDay.membersJoined += 1;
   // UpdateMemberCount(dayDiv, eventForDay);
@@ -401,9 +401,9 @@ function joinEvent() {
     if(document.getElementById('eventTitleDisplay').innerHTML.trim() == title){
       document.getElementById("joinbutton").innerHTML = "Joined";
       document.getElementById("joinbutton").style.backgroundColor = "lightblue";
-      
+
         document.getElementById("mcount").textContent = parseInt(document.getElementById("mcount").textContent) + 1;
-      
+
     }
     $.ajax({
         type: "POST",
@@ -436,7 +436,7 @@ function joinEvent() {
     });
     }
   }
-    
+
 }
 
 
@@ -507,7 +507,7 @@ document.body.addEventListener('click', function (event) {
     }
   }
   if (!event.target.closest('.event-details-panel') && document.getElementById("eventDetailsPanel").classList.contains("show-panel") && eventdet == false && infobar == true && editbar == true && !event.target.closest('.event')){
-    
+
     eventdet = true;
     closeEventDetails();
   }
@@ -519,13 +519,69 @@ document.body.addEventListener('click', function (event) {
     editbar = true;
     closeeditdet();
   }
-  
+
 });
 
 function addEvent2( title, date , place, duration, description) {
+  const formatterTime = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false, // Use 24-hour format
+  });
+  fetch('data.json')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parse the JSON data
+  })
+  .then(data => {       
 
-  const eventTitle = title;
-  const eventDate = date;
+    for (let i = 0; i < data.length; i++) {
+      if(data[i].title == title){
+        const event = data[i];
+
+        // Extract event hours and minutes, converting to numbers for comparison
+        const eventHours = parseInt(event.duration.slice(0, 2), 10);
+        const eventMinutes = parseInt(event.duration.slice(3, 5), 10);
+        const eventEndHours = parseInt(event.duration.slice(6, 8))
+        const eventEndMinutes = parseInt(event.duration.slice(9, 11), 10)
+
+        // Extract current hours and minutes, converting to numbers for comparison
+        const currentHours = parseInt(formattedTime.slice(0, 2), 10);
+        const currentMinutes = parseInt(formattedTime.slice(3, 5), 10);
+        //alert(eventMinutes)
+
+        // Ensure the event date is the same as today's date
+        const isSameDay = event.data === formattedDate;
+
+        // Check if the event has started by comparing hours and minutes
+        // If it's the same hour, check minutes
+        const isEventEnded = (
+          (eventEndHours < currentHours) || // if event ended hour ago
+            (eventEndHours === currentHours && eventEndMinutes <= currentMinutes) // If it's the same hour, check minutes
+        )
+        //alert(currentHours, currentMinutes, eventEndMinutes, eventEndHours)
+        // If both conditions are met, update the button text
+        if(isEventEnded){
+          calculatetotal(event.title,eventEndHours, eventEndMinutes)
+          //calculate time and add to leadeboard/member.json
+        }
+      }
+    }
+
+
+
+  })
+  .catch(error => {
+      console.error('There was a problem with fetching the text file:', error);
+  });
+
+  
+
+  // Extract current hours and minutes, converting to numbers for comparison
+  
   const year = parseInt(eventDate.split('-')[0],10);
   var month = parseInt(eventDate.split('-')[1],10);
   var day = parseInt(eventDate.split('-')[2],10);
@@ -544,7 +600,7 @@ function addEvent2( title, date , place, duration, description) {
   else if (year === currentYear && month === currentMonth2 && day < currentDay) {
       red = true;
   }
-  
+
 
   const eventplace = place;
   const eventDuration = duration +" hour(s)";
@@ -567,7 +623,7 @@ function addEvent2( title, date , place, duration, description) {
       eventElement.textContent = eventTitle;
 
     eventElement.addEventListener('click', function () {
-      
+
         showEventDetails(eventTitle || "", eventDate || "", eventplace || "", eventDuration || "", eventDescription || "");
     });
 
@@ -614,12 +670,12 @@ function addEvent() {
         eventElement.classList.add('event');
         eventElement.textContent = eventTitle;
         if (red){
-  
+
           eventElement.style.backgroundColor = "orangered";
           eventElement.style.color = "black";
         }
         eventElement.addEventListener('click', function () {
-    
+
         showEventDetails(eventTitle, eventDate, eventplace, eventDuration, eventDescription);
       });
         dayDiv.appendChild(eventElement);
@@ -702,7 +758,7 @@ function showEventDetails(title, date, place, duration, description) {
       return response.json(); // Parse the JSON data
   })
   .then(data => {       
-    
+
     for (let i = 0; i < data.length; i++) {
       if(data[i].title == title){
         const event = data[i];
@@ -710,11 +766,13 @@ function showEventDetails(title, date, place, duration, description) {
         // Extract event hours and minutes, converting to numbers for comparison
         const eventHours = parseInt(event.duration.slice(0, 2), 10);
         const eventMinutes = parseInt(event.duration.slice(3, 5), 10);
+        const eventEndHours = parseInt(event.duration.slice(6, 8))
+        const eventEndMinutes = parseInt(event.duration.slice(9, 11), 10)
 
         // Extract current hours and minutes, converting to numbers for comparison
         const currentHours = parseInt(formattedTime.slice(0, 2), 10);
         const currentMinutes = parseInt(formattedTime.slice(3, 5), 10);
-        alert(eventMinutes)
+        //alert(eventMinutes)
 
         // Ensure the event date is the same as today's date
         const isSameDay = event.data === formattedDate;
@@ -724,12 +782,19 @@ function showEventDetails(title, date, place, duration, description) {
             (eventHours < currentHours) || // If the event started in a previous hour
             (eventHours === currentHours && eventMinutes <= currentMinutes) // If it's the same hour, check minutes
         );
-        alert(event.data) 
-        alert(formattedDate)
+        const isEventEnded = (
+          (eventEndHours < currentHours) || // if event ended hour ago
+            (eventEndHours === currentHours && eventEndMinutes <= currentMinutes) // If it's the same hour, check minutes
+        )
+        //alert(currentHours, currentMinutes, eventEndMinutes, eventEndHours)
         // If both conditions are met, update the button text
-        if (isSameDay && isEventStarted) {
+        if (isSameDay && isEventStarted && !isEventEnded) {
             document.getElementById("joinbutton").textContent = "ATTENDANCE STARTED";
+            document.getElementById("joinbutton").style.backgroundColor = "green";
             break; // Exit loop as soon as attendance starts for any event
+        } if(isEventEnded){
+          alert("ended")
+          //calculate time and add to leadeboard/member.json
         }
       }
     }
@@ -740,9 +805,9 @@ function showEventDetails(title, date, place, duration, description) {
   .catch(error => {
       console.error('There was a problem with fetching the text file:', error);
   });
-  
 
-    
+
+
   if (document.getElementById('changechat')){
     document.getElementById('changechat').innerHTML = title + " Chat";
   }
@@ -753,7 +818,7 @@ function showEventDetails(title, date, place, duration, description) {
   const eventDay = parseInt(eventDate.split('-')[2],10);
   let joinButton = document.getElementById('joinbutton');
   //add eventDay == currentDay later;
-  
+
   if (eventYear == currentYear && eventMonth == currentMonth2) {
 
     if (joinButton) {
@@ -761,9 +826,9 @@ function showEventDetails(title, date, place, duration, description) {
         joinButton.style.display = 'block';
       const title = document.getElementById("eventTitleDisplay").textContent.trim();
       const safeTitle = encodeURIComponent(title);  // Sanitizing the title
-      
+
       fetch(safeTitle + ".txt")
-        
+
       .then(response => {
         // Check if the response is successful
         if (!response.ok) {
@@ -773,19 +838,19 @@ function showEventDetails(title, date, place, duration, description) {
       })
       .then(data => {       
         const textLines = data.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-        
+
         const userName = localStorage.getItem("name");
         //alert(textLines.includes(userName))
 
         // Get the user's name from local storage
         if(document.getElementById('eventTitleDisplay').innerHTML == title){
-          document.getElementById("mcount").textContent = textLines.length;
+          document.getElementById("mcount").textContent = textLines.length/3;
         }
 
         // Check if the user's name is in the list of names for this event
-        
+
         if (textLines.includes(userName) && document.getElementById("eventTitleDisplay").innerHTML.trim() == title ) {
-          
+
           // If the name is already in the list, show the user they have already joined
           document.getElementById("joinbutton").innerHTML = "Joined";
           document.getElementById("joinbutton").style.backgroundColor = "lightblue"
@@ -823,7 +888,7 @@ function editevent(){
     showeditdet();
     setTimeout(function(){editbar=false},450);
   }
-  
+
 }
 function closeeditdet(){
   document.getElementById('editDetails').classList.remove("show-panel2");
@@ -832,7 +897,7 @@ function showeditdet(){
   document.getElementById('editDetails').classList.add("show-panel2");
 }
 function sidebar(){
-  
+
   if (document.getElementById('eventDetailsPanel2').classList.contains("show-panel2")){
     closeEventDetails2();
     infobar = true;
@@ -851,12 +916,18 @@ function sidebar(){
       })
       .then(data => {
         textLines = data.split('\n')
-        
-        
-        for (let i = 0; i<textLines.length;i++){
+
+
+        for (let i = 2; i<textLines.length;i+=3){
+          if((textLines[i-2] == "owner" || textLines[i-2] == "officer") && textLines[i] == localStorage.getItem("name")){
+            //add permissions
+            alert("wow you're the owner")
+            //make officer button
+            
+          }
           if (textLines[i]) {
-              alert(textLines[i])
-          
+              
+
               const nameElement = document.createElement('span');
               nameElement.id = textLines[i]
               nameElement.textContent = textLines[i]; // Set the name text
@@ -865,11 +936,23 @@ function sidebar(){
               const button = document.createElement('button');
               button.textContent = "Here"; // Set button text
             button.id = document.getElementById("eventTitleDisplay").textContent;
-            button.className = "joinbutton"  
+            button.className = "joinbutton"
+            const now = new Date();
+  
+            const formatterTime = new Intl.DateTimeFormat('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false, // Use 24-hour format
+            });
+
+            // Get the formatted date in MM/DD/YYYY format
             
+            const formattedTime = formatterTime.format(now);
             button.onclick = function() {
                 data = {
-                  buttonId: nameElement.id,
+                  buttonId: localStorage.getItem("name"),
+                  buttonkid: formattedTime,
                   filePat: document.getElementById("eventTitleDisplay").textContent
                 }
                   //alert("comming soon")
@@ -897,19 +980,19 @@ function sidebar(){
             nameElement.className = "joinedpple";
             button.className = "joinedpple";
             lineBreak.className = "joinedpple";
-            
+
 
               // Append all elements to the container
               const container = document.getElementById('joinedppl');
               container.appendChild(nameElement);  // Add the name
               container.appendChild(button);      // Add the button
               container.appendChild(lineBreak);   // Add the line break
-              
-              
+
+
           }
-         
+
         }
-        
+
       })
       .catch(error => {
           console.error('There was a problem with fetching the text file:', error);
@@ -921,7 +1004,7 @@ function sidebar(){
 function showEventDetails2(){
   const panel = document.getElementById('eventDetailsPanel2');
   panel.classList.add('show-panel2');
-  
+
 }
 function closeEventDetails2() {
   const panel = document.getElementById('eventDetailsPanel2');
@@ -934,196 +1017,47 @@ function changetochat(){
   displaychat()
 }
 
-const OPENAI_API_KEY = 'your-openai-api-key-here'; // Replace with your API key
-async function chatbotMessage(message, curchat) {
-    if (curchat !== "general") {
-        try {
-            // Fetch the data from the local JSON file
-            const response = await fetch("data.json");
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
 
-            // Parse the JSON data
-            const data = await response.json();
 
-            // Fetch the chatroom-specific text data
-            const chatResponse = await fetch(`${curchat}.txt`);
-            if (!chatResponse.ok) {
-                throw new Error("Network response was not ok");
-            }
 
-            const chatData = await chatResponse.text(); // Read as text since it's a `.txt` file
+function displaychat() {
+  const chatContainer = document.getElementById("chatContainer");
+  chatContainer.innerHTML = ""; // Clear chat container
 
-            // Create a time formatter for the current time in 24-hour format
-            const now = new Date();
-            const formatterTime = new Intl.DateTimeFormat('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false, // Use 24-hour format
-            });
-            const formattedTime = formatterTime.format(now);
+  const chatRef = collection(db, "chats");
+  const q = query(chatRef, orderBy("timestamp"));
 
-            // Create the message payload for GPT-4
-            const GPT4Message = [
-                {
-                    role: "system",
-                    content: `Here is all of the Event Calendar Data: ${JSON.stringify(data)}. 
-                    Ignore this one if empty, but it contains information relative to the event chatroom you are in: ${chatData}. 
-                    If you are prompted, the current time is ${formattedTime}`,
-                },
-                {
-                    role: "user",
-                    content: message,
-                },
-            ];
+  onSnapshot(q, (snapshot) => {
+    chatContainer.innerHTML = ""; // Clear chat container for real-time updates
+    snapshot.forEach((doc) => {
+      const chatData = doc.data();
+      if (chatData.chatroom === localStorage.getItem("curchat")) {
+        const row = document.createElement("tr");
 
-            // Call GPT-4
-            const GPT4Response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: "gpt-4",
-                    messages: GPT4Message
-                })
-            });
+        // Create and style the name cell
+        const nameCell = document.createElement("td");
+        nameCell.className = "namestuf";
+        nameCell.innerHTML = `${chatData.username.trim()}:\xa0`;
+        nameCell.style.color = chatData.username === localStorage.getItem("name") ? "lightgreen" : "black";
+        nameCell.style.fontWeight = chatData.username === localStorage.getItem("name") ? "bold" : "normal";
+        row.appendChild(nameCell);
 
-            if (!GPT4Response.ok) {
-                throw new Error("Network response was not ok");
-            }
+        // Create and style the message cell
+        const messageCell = document.createElement("td");
+        messageCell.className = "textstuf";
+        messageCell.innerHTML = chatData.message;
+        row.appendChild(messageCell);
 
-            const GPT4Data = await GPT4Response.json();
-            return GPT4Data.choices[0].message.content;
-        } catch (error) {
-            console.error("Error in fetching data or calling GPT-4:", error);
-            return "There was an error processing your request.";
-        }
-    }
+        // Append the row to the chat container
+        chatContainer.appendChild(row);
+      }
+    });
+
+    // Scroll to the bottom of the chat
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  });
 }
 
-
-
-function chatsend() {
-    var chatbox = document.getElementById("chatbox");
-    if(chatbox.value.includes("@gpt")){
-      (async () => {
-        const result = await chatbotMessage("What is the event schedule?",localStorage.getItem("curchat"));
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "chat.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Disable the input field before sending the request
-        chatbox.disabled = true;
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Re-enable the input field after the response is received
-                chatbox.disabled = false;
-
-            }
-        };
-
-        const curChat = encodeURIComponent(localStorage.getItem("curchat"));
-        const name = encodeURIComponent(localStorage.getItem("name"));
-        const chatboxValue = encodeURIComponent(chatbox.value);
-
-        // Create the data string with newlines encoded as %0A
-        const data = `username=${curChat}%0A${name} %0A${chatboxValue}`;
-        xhr.send(data);
-
-        // Clear chatbox after sending
-        chatbox.value = "";
-        displaychat();
-        document.getElementById("chatContainer").scrollTop = document.getElementById("chatContainer").scrollHeight;
-      })();
-    }
-    if (chatbox.value.trim() !== "" && chatbox.value.trim().length <= 1500) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "chat.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Disable the input field before sending the request
-        chatbox.disabled = true;
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Re-enable the input field after the response is received
-                chatbox.disabled = false;
-
-            }
-        };
-
-        const curChat = encodeURIComponent(localStorage.getItem("curchat"));
-        const name = encodeURIComponent(localStorage.getItem("name"));
-        const chatboxValue = encodeURIComponent(chatbox.value);
-
-        // Create the data string with newlines encoded as %0A
-        const data = `username=${curChat}%0A${name} %0A${chatboxValue}`;
-        xhr.send(data);
-
-        // Clear chatbox after sending
-        chatbox.value = "";
-        displaychat();
-        document.getElementById("chatContainer").scrollTop = document.getElementById("chatContainer").scrollHeight;
-    } else if (chatbox.value.trim().length > 1500) {
-        chatbox.value = "Message too long";
-    }
-}
-
-
-function displaychat(){
-  if (document.getElementById("chatbox")){
-    var textLines = []
-      fetch('chat.txt')
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.text();
-      })
-      .then(data => {
-        textLines = data.split('\n')
-          var chat = [];
-          for(i=2;i<textLines.length;i+=3){
-
-            if(textLines[i-2] == localStorage.getItem("curchat")){
-              chat.push({ name: textLines[i-1], score: textLines[i] })
-            }
-
-          }
-
-        document.getElementById("chatContainer").innerHTML = "";
-        chat.forEach(function(player, index) {
-          //console.log(`${index + 1}. ${player.name}: ${player.score}`);
-          var row = document.createElement('tr');
-          //nameofbro
-          var nameCell = document.createElement('td');
-          nameCell.className = "namestuf";
-          nameCell.innerHTML = player.name.trim()+":\xa0";
-          nameCell.style.color = "black"
-          if (player.name == localStorage.getItem("name")){
-            nameCell.style.color = "lightgreen";
-            nameCell.style.fontWeight = "bold";
-          }
-          row.appendChild(nameCell);
-          //hisscore
-          var coinsCell = document.createElement('td');
-          coinsCell.className = "textstuf";
-          coinsCell.innerHTML = player.score;
-          row.appendChild(coinsCell);
-          //plzworkdaddy
-          document.getElementById("chatContainer").appendChild(row);  
-      })
-    })
-      .catch(error => {
-          console.error('There was a problem with fetching the text file:', error);
-      });
-  }
-}
 
 
 // Execute a function when the user presses a key on the keyboard
@@ -1153,7 +1087,7 @@ $('#eventForm').on('submit', function(e) {
         eventPlace: $('#eventPlace').val(),
         eventDescription: $('#eventDescription').val()
     };
-    
+
   $.ajax({
       type: 'POST',
       url: 'updateJson.php',
@@ -1209,4 +1143,29 @@ function createTrail(x, y) {
   setTimeout(() => {
       trail.remove();
   }, 800);  // Matches the animation duration
+}
+function calculatetotale(file,endhr,endmin) {
+  textlines = []
+  fetch(encodeURIComponent(file)+'.txt')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parse the JSON data
+    })
+    .then(data => {    
+      textLines = data.split('\n')
+      for(i=2;i<textLines.length;i+=3){
+        start = textLines[i-1]
+        starthr = parseInt(start.slice(0,2))
+        startmin = parseInt(start.slice(3,5))
+        localStorage.setItem("serviceminutes",60*(endhr-starthr)-endmin-startmin)
+      //track service hours here
+        
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with fetching the text file:',
+                    error);
+    });  
 }
