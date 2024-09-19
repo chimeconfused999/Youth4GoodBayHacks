@@ -12,7 +12,10 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="firebase.js"></script>
+    <script type="module" src="chatgpt.js"></script>
+
     <script src="googlesignin.js"></script>
+    
     </head>
 <body>
 
@@ -22,7 +25,7 @@
             <span id = "overview" onclick="transitionToPage('index.html')" class = "currentpage">Overview</span>
         </div>
     </div>
-    
+
 
     <div id = "TITLE">
         <h1>Youth 4 Good</h1>
@@ -43,7 +46,7 @@
           </div></span>
           <span><div class="event-form">
                 <input type="text" id="eventLocation" placeholder="Event Location" />
-                 <input type="number" id="eventDuration" placeholder="Event Event Duration" />
+                 <input type="time" id="eventStart"/>-<input type = "time" id="eventEnd" >
             </div></span>
           <span id = "lastform"><div  class="event-form">
                   <input type="text" id="eventDescription" placeholder="Event Description" />
@@ -66,11 +69,11 @@
             </div>
         </div>
     </div>
-    
+
     <div id="eventDetailsPanel2" class="event-details-panel2">
        <h1 class = "joined">Joined: </h1>
         <h2 id = "joinedppl"></h2>
-       
+
 
 
     </div>
@@ -110,7 +113,7 @@
         <button class = "eventDetPanBTN" id = "changechat" onclick = "changetochat()">Change Chat</button>
         <button class = "eventDetPanBTN" id = "joinbutton" onclick = "joinEvent()">Join</button>
         <button class = "adminonly" id = "closeevent" onclick="sidebar()">Info</button>
-        
+
         <button id = "editevent" class = "adminonly" onclick="editevent()">Edit</button>
     </div>
 
@@ -121,11 +124,70 @@
               <input type="text" id="chatbox" name="name" placeholder ="Enter your message:">
               </form></div>
               <div id = "generalbut"><button id = "chatbut2" onclick = "switchtogeneral()">Switch To General</button></div>
-              <div id= "chatbutcont"><button id = "chatbut" onclick = "chatsend()">Send</button></div>
+              <div id= "chatbutcont"><button id = "chatbut">Send</button></div>
+              <script type = "module">
+                  import { chatbotMessage } from './chatgpt.js';
+                  import { chatsend } from './chatsend.js';
+
+                  // Example usage
+                  
+                  async function sendMessage() {
+                    
+                    const message = document.getElementById('chatbox').value.trim();
+                      if(message.includes("@gpt")){
+                    const curhat = localStorage.getItem("curchat");
+                    const curchat = curhat.replace("Chat","").trim()
+                    
+                    const response = await chatbotMessage(message, curchat);
+                      var xhr = new XMLHttpRequest();
+                      xhr.open("POST", "chat.php", true);
+                      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                      // Disable the input field before sending the request
+                      chatbox.disabled = true;
+
+                      xhr.onreadystatechange = function() {
+                          if (xhr.readyState === 4 && xhr.status === 200) {
+                              // Re-enable the input field after the response is received
+                              chatbox.disabled = false;
+
+                          }
+                      };
+
+                      const curChat = encodeURIComponent(curchat.trim());
+                      const name = encodeURIComponent("Youth4GoodBot");
+                      const chatboxValue = encodeURIComponent(response);
+
+                      // Create the data string with newlines encoded as %0A
+                      const data = `username=${curChat}%0A${name} %0A${chatboxValue}`;
+                      xhr.send(data);
+
+                      // Clear chatbox after sending
+                      chatbox.value = "";
+                      displaychat();
+                  }
+                  }
+                  window.addEventListener("keypress", function(event) {
+                    // If the user presses the "Enter" key on the keyboard
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                        
+                      sendMessage()
+                        chatsend()
+                    }
+                  });
+                  
+    
+                
+
+                  
+
+              </script>
           </span>
           <span><img id = "titlepageimg" src = "Youth4g.png"></span>
 
     </div>
     <script src="script.js"></script>
+    
 </body>
 </html>
